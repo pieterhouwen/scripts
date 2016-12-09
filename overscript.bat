@@ -30,6 +30,7 @@ REM System cleaner van pieterhouwen.info/scripts/cleansys.bat
 rem recoverytools (sfc) + win7 change + 
 rem Files laten opstarten @ system startup
 rem Opstartvolgorde aanvragen (registry)
+rem Firewall regels toevoegen en verwijderen (poorten + IP's)
 
 :perm_fail
 echo U heeft niet de goede permissies, start dit programma opnieuw als admin om het te gebruiken.
