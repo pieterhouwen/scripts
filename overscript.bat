@@ -25,7 +25,11 @@ if %choice% == 3 goto nettools
 :hwtools
 :nettools
 
-
+REM TODO's
+REM System cleaner van pieterhouwen.info/scripts/cleansys.bat
+rem recoverytools (sfc) + win7 change + 
+rem Files laten opstarten @ system startup
+rem Opstartvolgorde aanvragen (registry)
 
 :perm_fail
 echo U heeft niet de goede permissies, start dit programma opnieuw als admin om het te gebruiken.
