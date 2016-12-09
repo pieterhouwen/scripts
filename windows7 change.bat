@@ -60,6 +60,7 @@ goto menu
 
 :end
 echo Complete!
+echo
 pause
 del dumpbestand
 REM Ode aan Roland!
