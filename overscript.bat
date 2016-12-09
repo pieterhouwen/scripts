@@ -2,8 +2,10 @@
 cls
 title Extreme OverScript
 echo Checking permissions....
-echo Temp >%windir%\tempfile
-if %errorlevel% == 1 then goto perm_fail
+net session 2>&1 >nul
+if %errorlevel% == 0 then goto perm_success
+goto perm_fail
+:perm_success
 :main
 echo.
 echo Welkom in de all-in-one batch toolkit!
@@ -31,8 +33,14 @@ rem recoverytools (sfc) + win7 change +
 rem Files laten opstarten @ system startup
 rem Opstartvolgorde aanvragen (registry)
 rem Firewall regels toevoegen en verwijderen (poorten + IP's)
+rem Firewall opties: alleen poorten (defineren als variable), executables, richtingen (in + uit)
+rem Firewall opties: Regels toevoegen en verwijderen (alleen regels die wij zelf hebben aangemaakt)
+rem Firewall opties: TIP: schrijf de namen van nieuwe regels weg naar bestand zodat je dat later weer kan
+rem opvragen.
 
 :perm_fail
 echo U heeft niet de goede permissies, start dit programma opnieuw als admin om het te gebruiken.
+echo Druk op een toets om dit programma als admin te starten.
 pause >nul
+runas /user:administrator %0
 exit
