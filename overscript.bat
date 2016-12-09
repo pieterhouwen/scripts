@@ -21,9 +21,9 @@ if %choice% == 1 goto winsystools
 if %choice% == 2 goto hwtools
 if %choice% == 3 goto nettools
 
-
-
-
+:winsystool
+:hwtools
+:nettools
 
 
 
