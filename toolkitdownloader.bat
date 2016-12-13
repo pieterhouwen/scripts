@@ -1,7 +1,7 @@
 @echo off
 cls
 echo Downloading toolkit, please wait. . .
-mkdir toolkit
+mkdir toolkit & cd toolkit
 
 bitsadmin /transfer overscript /download /priority normal https://github.com/pieterhouwen/scripts/overscript.bat toolkit/overscript.bat 2>overscript_log.log 1>nul
 
