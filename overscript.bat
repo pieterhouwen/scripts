@@ -45,6 +45,13 @@ echo -                                                  -
 echo ----------------------------------------------------
 echo.
 set /p choice=Maak uw keuze:
+if %choice% == goto 
+if %choice% == goto 
+if %choice% == goto 
+if %choice% == goto 
+if %choice% == goto 
+if %choice% == goto 
+
 
 :hwtools
 cls
@@ -58,9 +65,16 @@ echo -                                                  -
 echo -           Made by Pieter and Roland              -
 echo -                                                  -
 echo ----------------------------------------------------
+set /p choice=Maak uw keuze:
+if %choice% == goto 
+if %choice% == goto 
+if %choice% == goto 
+if %choice% == goto 
+if %choice% == goto 
+if %choice% == goto 
 :nettools
 cls
-
+echo          Windows Network Tools
 
 REM TODO's
 REM System cleaner van pieterhouwen.info/scripts/cleansys.bat
