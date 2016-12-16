@@ -4,7 +4,6 @@ net session 2>&1 >nul
 if %errorlevel% NEQ 0 goto perm_fail
 :perm_success
 echo Downloading bcdedit to current folder. . . 
-set cd=%cd%
 set desktop=%userprofile%\desktop
 rem VEROUDERD: bitsadmin /transfer bcdedit /download /priority normal https://pieterhouwen.info/scripts/programs/bcdedit.exe %cd%\bcdedit.exe $Env:cd\bcdedit.exe	
 rem powershell -command (New-Object System.Net.WebClient).DownloadFile("https://pieterhouwen.info/scripts/programs/bcdedit.exe", "bcdedit.exe")  

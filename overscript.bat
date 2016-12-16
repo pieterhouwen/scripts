@@ -61,6 +61,7 @@ echo.
 echo ----------------------------------------------------
 echo -                                                  -
 echo - 1. Get motherboard info                          -
+echo - 2. Get RAM size (bytes) speed, type, bus         -
 echo -                                                  -
 echo -           Made by Pieter and Roland              -
 echo -                                                  -
@@ -75,6 +76,14 @@ if %choice% == goto
 :nettools
 cls
 echo          Windows Network Tools
+echo.
+echo ----------------------------------------------------
+echo -                                                  -
+echo - 1. Firewall Settings Menu                        -
+echo -                                                  -
+echo -           Made by Pieter and Roland              -
+echo -                                                  -
+echo ----------------------------------------------------
 
 REM TODO's
 REM System cleaner van pieterhouwen.info/scripts/cleansys.bat
