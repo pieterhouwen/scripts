@@ -24,34 +24,24 @@ REM ERRORS
 :download_error_os
 echo Overscript failed to download, trying another method.
 powershell.exe -command (new-object System.Net.WebClient).DownloadFile('https://github.com/pieterhouwen/scripts/tree/master/overscript.bat', '$Env:temp\overscript.bat')
-if errorlevel NEQ 0 goto download_error_os2
+if errorlevel NEQ 0 goto download_error_2
 copy %temp%\overscript.bat .
 goto download_mb
 pause
 
 :download_error_mb
 echo Motherboard failed to download, trying another method.powershell.exe -command (new-object System.Net.WebClient).DownloadFile('https://github.com/pieterhouwen/scripts/tree/master/motherboard.bat', '$Env:temp\motherboard.bat')
-powershell.exe -command (new-object System.Net.WebClient).DownloadFile('https://github.com/pieterhouwen/scripts/tree/master/overscript.bat', '$Env:temp\overscript.bat')
-if errorlevel NEQ 0 goto download_error_mb2
+powershell.exe -command (new-object System.Net.WebClient).DownloadFile('https://github.com/pieterhouwen/scripts/tree/master/hardtools/motherboard.bat', '$Env:temp\motherboard.bat')
+if errorlevel NEQ 0 goto download_error_2
 copy %temp%\motherboard.bat .
 
 :download_error_or
 echo Outlokreset failed to download, trying another method.
-powershell.exe -command (new-object System.Net.WebClient).DownloadFile('https://github.com/pieterhouwen/scripts/tree/master/outlookreset.bat', '$Env:temp\outlookreset.bat')
-if errorlevel NEQ 0 goto download_error_or2
+powershell.exe -command (new-object System.Net.WebClient).DownloadFile('https://github.com/pieterhouwen/scripts/tree/master/wintools/outlookreset.bat', '$Env:temp\outlookreset.bat')
+if errorlevel NEQ 0 goto download_error_2
 copy %temp%\outlookreset.bat .
 
-:download_error_os2
-echo Something went wrong again, please check the output.
-pause
-exit
-
-:download_error_mb2
-echo Something went wrong again, please check the output.
-pause
-exit
-
-:download_error_or2
+:download_error_2
 echo Something went wrong again, please check the output.
 pause
 exit
