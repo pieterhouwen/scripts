@@ -100,5 +100,5 @@ rem opvragen.
 echo U heeft niet de goede permissies, start dit programma opnieuw als admin om het te gebruiken.
 echo Druk op een toets om dit programma als admin te starten.
 pause >nul
-runas /user:administrator %0
+powershell "saps -filepath %0 -verb runas"
 exit
