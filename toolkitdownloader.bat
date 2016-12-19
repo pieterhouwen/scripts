@@ -7,17 +7,24 @@ mkdir nettools
 mkdir wintools
 
 :download_os
-bitsadmin /transfer overscript /download /priority normal https://github.com/pieterhouwen/scripts/overscript.bat overscript.bat 2>overscript_log.log 1>nul
+bitsadmin /transfer overscript /download /priority normal https://github.com/pieterhouwen/scripts/tree/master/overscript.bat overscript.bat 2>overscript_log.log 1>nul
 if %errorlevel% NEQ 0 goto download_error_os
 
 :download_mb
-bitsadmin /transfer motherboard /download /priority normal https://github.com/pieterhouwen/scripts/motherboard.bat motherboard.bat 2>motherboard_log.log 1>nul
+bitsadmin /transfer motherboard /download /priority normal https://github.com/pieterhouwen/scripts/tree/master/hardtools/motherboard.bat hardtools\motherboard.bat 2>motherboard_log.log 1>nul
 if %errorlevel% NEQ 0 goto download_error_mb
 
 :download_or
-bitsadmin /transfer outlookreset /download /priority normal https://github.com/pieterhouwen/scripts/outlookreset.bat outlookreset.bat 2>outlookreset_log.log 1>nul
+bitsadmin /transfer outlookreset /download /priority normal https://github.com/pieterhouwen/scripts/tree/master/wintools/outlookreset.bat wintools\outlookreset.bat 2>outlookreset_log.log 1>nul
 if %errorlevel% NEQ 0 goto download_error_or
 
+:download_bc
+bitsadmin /transfer BCDedit /download /priority normal https://github.com/pieterhouwen/scripts/tree/master/wintools/bcdedit.bat wintools\bcdedit.bat 2>bcdedit_log.log 1>nul
+if %errorlevel% NEQ 0 goto download_error_bc
+
+:download_sd
+bitsadmin /transfer ShowDrives /download /priority normal https://github.com/pieterhouwen/scripts/tree/master/wintools/showdrives wintools\showdrives.bat 2>showdrives_log.log 1>nul
+if %errorlevel% NEQ 0 goto download_error_sd
 
 
 
@@ -45,6 +52,8 @@ echo Outlokreset failed to download, trying another method.
 powershell.exe -command (new-object System.Net.WebClient).DownloadFile('https://github.com/pieterhouwen/scripts/tree/master/wintools/outlookreset.bat', '$Env:temp\outlookreset.bat')
 if errorlevel NEQ 0 goto download_error_2
 copy %temp%\outlookreset.bat wintools\outlookreset.bat
+
+
 
 :download_error_2
 echo Something went wrong again, please check the output.
