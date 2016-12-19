@@ -31,16 +31,16 @@ cls
 echo.
 echo             Windows System Tools menu    
 echo.
-echo ----------------------------------------------------
-echo -                                                  -
-echo - 1. Fast Universal Cleaning Kit                   -
-echo - 2. Legacy bootmenu switcher                      -
-echo - 3. Outlook profile resetter                      -
-echo - 4. Windows 7 Version changer (CD/DVD required)   -
-echo - 5. Show drives and free space                    -
-echo - 6. System File Checker                           -
-echo -                                                  -
-echo ----------------------------------------------------
+echo ^|--------------------------------------------------^|
+echo ^|                                                  ^|
+echo ^| 1. Fast Universal Cleaning Kit                   ^|
+echo ^| 2. Legacy bootmenu switcher                      ^|
+echo ^| 3. Outlook profile resetter                      ^|
+echo ^| 4. Windows 7 Version changer (CD/DVD required)   ^|
+echo ^| 5. Show drives and free space                    ^|
+echo ^| 6. System File Checker                           ^|
+echo ^|                                                  ^|
+echo ^|--------------------------------------------------^|
 echo.
 set /p choice=Maak uw keuze:
 if %choice% == goto 
@@ -56,12 +56,12 @@ cls
 echo.
 echo           Windows Hardware Tools
 echo.
-echo ----------------------------------------------------
-echo -                                                  -
-echo - 1. Get motherboard info                          -
-echo - 2. Get RAM size (bytes) speed, type, bus         -
-echo -                                                  -
-echo ----------------------------------------------------
+echo ^|--------------------------------------------------^|
+echo ^|                                                  ^|
+echo ^| 1. Get motherboard info                          ^|
+echo ^| 2. Get RAM size (bytes) speed, type, bus         ^|
+echo ^|                                                  ^|
+echo ^|--------------------------------------------------^|
 set /p choice=Maak uw keuze:
 if %choice% == goto 
 if %choice% == goto 
@@ -73,12 +73,12 @@ if %choice% == goto
 cls
 echo          Windows Network Tools
 echo.
-echo ----------------------------------------------------
-echo -                                                  -
-echo - 1. Firewall Settings Menu                        -
-echo -                                                  -
-echo -                                                  -
-echo ----------------------------------------------------
+echo ^|--------------------------------------------------^|
+echo ^|                                                  ^|
+echo ^| 1. Firewall Settings Menu                        ^|
+echo ^|                                                  ^|
+echo ^|                                                  ^|
+echo ^|--------------------------------------------------^|
 
 REM TODO's
 REM System cleaner van pieterhouwen.info/scripts/cleansys.bat
