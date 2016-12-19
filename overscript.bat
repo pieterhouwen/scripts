@@ -11,15 +11,15 @@ cls
 echo.
 echo       Welkom in de all-in-one batch toolkit!
 echo.
-echo ----------------------------------------------------
-echo -                                                  -
-echo - 1. Windows System Tools                          -
-echo - 2. Hardware information/tools                    -
-echo - 3. Network Tools                                 -
-echo -                                                  -
-echo -           Made by Pieter and Roland              -
-echo -                                                  -
-echo ----------------------------------------------------
+echo ^|-------------------------------------------------^|
+echo ^|                                                 ^|
+echo ^| 1. Windows System Tools                         ^|
+echo ^| 2. Hardware information/tools                   ^|
+echo ^| 3. Network Tools                                ^|
+echo ^|                                                 ^|
+echo ^|           Made by Pieter and Roland             ^|
+echo ^|                                                 ^|
+echo ^|-------------------------------------------------^|
 echo.
 set /p choice=Maak uw keuze:
 if %choice% == 1 goto winsystools
@@ -39,8 +39,6 @@ echo - 3. Outlook profile resetter                      -
 echo - 4. Windows 7 Version changer (CD/DVD required)   -
 echo - 5. Show drives and free space                    -
 echo - 6. System File Checker                           -
-echo -                                                  -
-echo -           Made by Pieter and Roland              -
 echo -                                                  -
 echo ----------------------------------------------------
 echo.
@@ -63,8 +61,6 @@ echo -                                                  -
 echo - 1. Get motherboard info                          -
 echo - 2. Get RAM size (bytes) speed, type, bus         -
 echo -                                                  -
-echo -           Made by Pieter and Roland              -
-echo -                                                  -
 echo ----------------------------------------------------
 set /p choice=Maak uw keuze:
 if %choice% == goto 
@@ -81,7 +77,6 @@ echo ----------------------------------------------------
 echo -                                                  -
 echo - 1. Firewall Settings Menu                        -
 echo -                                                  -
-echo -           Made by Pieter and Roland              -
 echo -                                                  -
 echo ----------------------------------------------------
 
@@ -100,5 +95,5 @@ rem opvragen.
 echo U heeft niet de goede permissies, start dit programma opnieuw als admin om het te gebruiken.
 echo Druk op een toets om dit programma als admin te starten.
 pause >nul
-runas /user:administrator %0
+powershell "saps -filepath %0 -verb runas"
 exit
