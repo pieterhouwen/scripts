@@ -6,8 +6,6 @@ REM Query installed language:
 for /f "tokens=3 delims= " %%L in ('reg query hklm\system\controlset001\control\nls\language /v Installlanguage ^| findstr 0') do set lng=%%L
 if %lng%==0413 set gateway=11
 if %lng%==0409 set gateway=13
-echo %lng%
-echo %gateway%
 pause
 
 echo Gathering info. . . 
@@ -30,7 +28,6 @@ echo Hello %username%! You are running: %windows%
 echo.
 echo IP: %pieter%		Gateway: %gw%
 echo Processor: %cpu%		
-echo %lng%
 pause
 
 rem Current IP
