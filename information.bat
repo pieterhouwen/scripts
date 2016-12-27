@@ -7,7 +7,7 @@ for /f "tokens=3 delims= " %%L in ('reg query hklm\system\controlset001\control\
 if %lng%==0413 set gateway=11
 if %lng%==0409 set gateway=13
 
-
+cls
 echo Gathering info. . . 
 
 REM find OS
@@ -19,10 +19,8 @@ for /f "tokens=14 delims= " %%B in ('ipconfig -all ^| findstr -i ipv4') do set p
 REM find Current gateway
 for /f "tokens=%gateway% delims= " %%A in ('ipconfig -all ^| findstr -i gateway') do set gw=%%A
 
-for /f "tokens=3 delims= " %%L in ('reg query hklm\system\controlset001\control\nls\language /v Installlanguage') do echo Language: %%L
-
 REM find processor
-for /f "tokens=*" %%F in ('wmic cpu get name ^| findstr -i -v name') do echo %%F
+for /f "tokens=2 delims==" %%F in ('wmic cpu get name /format:list') do set cpu=%%F
 cls
 echo Hello %username%! You are running: %windows%
 echo.
