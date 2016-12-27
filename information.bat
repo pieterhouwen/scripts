@@ -1,12 +1,12 @@
 @echo off
 title Information Finder
 cls
-REM Query installed language:
 
+REM Query installed language:
 for /f "tokens=3 delims= " %%L in ('reg query hklm\system\controlset001\control\nls\language /v Installlanguage ^| findstr 0') do set lng=%%L
 if %lng%==0413 set gateway=11
 if %lng%==0409 set gateway=13
-pause
+
 
 echo Gathering info. . . 
 
