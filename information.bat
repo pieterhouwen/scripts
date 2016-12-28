@@ -6,17 +6,17 @@ REM Query installed language:
 for /f "tokens=3 delims= " %%L in ('reg query hklm\system\controlset001\control\nls\language /v Installlanguage ^| findstr 0') do set lng=%%L
 if %lng%==0413 set tkens=11
 if %lng%==0409 set tkens=13
-if %lng%==0413 set tkensdns=13
+if %lng%==0413 set tkensdns=14
 if %lng%==0409 set tkensdns=15
 
 cls
 echo Gathering info. . . 
 
-bitsadmin /transfer externalIP /download /priority normal http://myexternalip.com/raw %temp%\extip.txt 2>download_error.log 1>nul
+bitsadmin /transfer externalIP /download /priority normal http://myexternalip.com/raw %temp%\extip.txt >nul
 if %errorlevel% NEQ 0 goto extiperror
-set /p extIP=<%temp%\extip.txt
 
 :findinfo
+set /p extIP=<%temp%\extip.txt
 REM find OS
 for /f "tokens=* delims=" %%E in ('wmic os get caption ^| findstr -i windows') do set windows=%%E
 
@@ -35,14 +35,14 @@ echo Hello %username%! You are running: %windows%
 echo.
 echo               Network information:
 echo.
-echo External IP: %extIP%
-echo IP: %pieter%
+echo  External IP: %extIP%
+echo  IP: %pieter%
 echo.
-echo Gateway: %gw%
-echo DNS: %dns%
+echo    Gateway: %gw%
+echo    DNS: %dns%
 
-
-
+echo.
+echo.
 
 echo Processor: %cpu%		
 pause
