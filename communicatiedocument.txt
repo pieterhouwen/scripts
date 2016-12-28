@@ -1,10 +1,18 @@
 TODO's
 System cleaner van pieterhouwen.info/scripts/cleansys.bat
+
 recoverytools (sfc) + win7 change + 
 Files laten opstarten @ system startup
+
 Opstartvolgorde aanvragen (registry)
+
 Firewall regels toevoegen en verwijderen (poorten + IP's)
+
 Firewall opties: alleen poorten (defineren als variable), executables, richtingen (in + uit)
+
 Firewall opties: Regels toevoegen en verwijderen (alleen regels die wij zelf hebben aangemaakt)
+
 Firewall opties: TIP: schrijf de namen van nieuwe regels weg naar bestand zodat je dat later weer kan
 opvragen.
+
+Verder nog even kijken wat handig is om te laten zien bij het opstarten.
