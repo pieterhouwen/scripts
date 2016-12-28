@@ -1,11 +1,12 @@
 @echo off
 title Windows Version Changer door Roland van Dam
 
-net session >amiadmin.txt 2>&1
+net session >nul 2>&1
 if %errorlevel% == 0 goto menu
-echo Dit programma wordt niet uitgevoerd als admin, fix die rechten yo.
+echo Dit programma wordt niet uitgevoerd als admin, opnieuw starten als admin. . . 
+powershell "saps -filepath %0 -verb runas"
 pause
-del amiadmin.txt
+
 exit
 :menu
 cls
