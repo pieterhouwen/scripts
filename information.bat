@@ -17,7 +17,7 @@ REM find IP
 for /f "tokens=14 delims= " %%B in ('ipconfig -all ^| findstr -i ipv4') do set pieter=%%B
 
 REM find Current gateway
-for /f "tokens=13 delims= " %%A in ('ipconfig -all ^| findstr -i gateway ^| findstr -i -v ::') do set gw=%%A
+for /f "tokens=%gateway% delims= " %%A in ('ipconfig -all ^| findstr -i gateway ^| findstr -i -v ::') do set gw=%%A
 
 REM find processor
 for /f "tokens=2 delims==" %%F in ('wmic cpu get name /format:list') do set cpu=%%F
