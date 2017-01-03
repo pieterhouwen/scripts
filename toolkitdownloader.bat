@@ -1,6 +1,7 @@
 @echo off
 cls
 echo Downloading toolkit, please wait. . .
+goto download_all
 mkdir toolkit & cd toolkit
 mkdir hardtools
 mkdir nettools
@@ -59,3 +60,21 @@ copy %temp%\outlookreset.bat wintools\outlookreset.bat
 echo Something went wrong again, please check the output.
 pause
 exit
+
+
+:Download_all
+mode 500
+mkdir %temp%\toolkit %temp%\toolkit\hardtools %temp%\toolkit\wintools %temp%\toolkit\nettools
+
+REM Root files
+call nettools\download2.bat OverScript https://github.com/pieterhouwen/scripts/tree/master/overscript.bat %temp%\toolkit\overscript.bat
+pause
+
+
+REM Hardware files
+call nettools\download2.bat Motherboard https://github.com/pieterhouwen/scripts/tree/master/hardtools/motherboard.bat %temp%\toolkit\hardtools\motherboard.bat
+pause
+
+REM Windows Tools
+call nettools\download2.bat OutlookReset https://github.com/pieterhouwen/scripts/tree/master/wintools/outlookreset.bat %temp%\toolkit\wintools\outlookreset.bat
+pause
