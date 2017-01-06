@@ -18,6 +18,9 @@ rem LET OP: Als er spaties in de maplocatie zitten zal het niet werken om hem al
 cls
 rem cls staat voor CLearScreen, wat dus het scherm leegmaakt.
 rem Als we hier aankomen betekent 't dus dat hij wordt uitgevoerd als admin.
+if exist %temp%\download.bat goto main
+bitsadmin /transfer downloader /download /priority normal https://github.com/pieterhouwen/scripts/tree/master/nettools/download.bat %temp%\download.bat
+pause
 
 :main
 cls
@@ -75,26 +78,7 @@ if %choice% == 6 goto sfc
 
 :cleansys
 
-
-:hwtools
-cls
-echo.
-echo           Windows Hardware Tools
-echo.
-echo ^|--------------------------------------------------^|
-echo ^|                                                  ^|
-echo ^| 1. Get motherboard info                          ^|
-echo ^| 2. Get RAM size (bytes) speed, type, bus         ^|
-echo ^|                                                  ^|
-echo ^|--------------------------------------------------^|
-set /p choice=Maak uw keuze:
-if %choice% == goto 
-if %choice% == goto 
-if %choice% == goto 
-if %choice% == goto 
-if %choice% == goto 
-if %choice% == goto 
-
+download cleansys https://pieterhouwen.info/scripts/cleansys.bat cleansys.bat
 
 :nettools
 cls
@@ -114,3 +98,6 @@ pause >nul
 rem Het volgende commando probeert met powershell het huidige script nogmaals te starten (%0), maar dit keer als admin.
 powershell "saps -filepath %0 -verb runas"
 exit
+
+
+:download_prog
