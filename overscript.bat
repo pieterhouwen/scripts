@@ -24,18 +24,17 @@ pause
 
 :main
 cls
-echo.
-echo       Welkom in de all-in-one batch toolkit!
-echo.
 echo ^|-------------------------------------------------^|
-echo ^|                                                 ^|
-echo ^| 1. Windows System Tools                         ^|
-echo ^| 2. Hardware information/tools                   ^|
-echo ^| 3. Network Tools                                ^|
-echo ^|                                                 ^|
-echo ^|           Made by Pieter and Roland             ^|
-echo ^|                                                 ^|
+echo ^|      Welkom in de all-in-one batch toolkit!     ^|
+echo ^|				Made by Pieter and Roland           ^|
 echo ^|-------------------------------------------------^|
+echo.  
+echo 1. Windows System Tools                         
+echo 2. Hardware information/tools                   
+echo 3. Network Tools                                
+echo                                                               
+echo                                                  
+echo 
 echo.
 rem Het volgende commando maakt een variabele aan genaamd choice, wat dus een cijfer van 1 tot 3 moet bevatten.
 set /p choice=Maak uw keuze:
@@ -55,18 +54,16 @@ rem het uitvoeren van de code.
 :winsystools
 cls
 echo.
-echo             Windows System Tools menu    
-echo.
-echo ^|--------------------------------------------------^|
-echo ^|                                                  ^|
-echo ^| 1. Fast Universal Cleaning Kit                   ^|
-echo ^| 2. Legacy bootmenu switcher                      ^|
-echo ^| 3. Outlook profile resetter                      ^|
-echo ^| 4. Windows 7 Version changer (CD/DVD required)   ^|
-echo ^| 5. Show drives and free space                    ^|
-echo ^| 6. System File Checker                           ^|
-echo ^|                                                  ^|
-echo ^|--------------------------------------------------^|
+echo ^|-------------------------------------------------^|            
+echo ^|            Windows System Tools menu    		^|
+echo ^|-------------------------------------------------^|
+echo.                                                   
+echo 1. Fast Universal Cleaning Kit                   
+echo 2. Legacy bootmenu switcher                      
+echo 3. Outlook profile resetter                      
+echo 4. Windows 7 Version changer (CD/DVD required)   
+echo 5. Show drives and free space                    
+echo 6. System File Checker                                                                          
 echo.
 set /p choice=Maak uw keuze:
 if %choice% == 1 goto cleansys
@@ -82,8 +79,9 @@ download cleansys https://pieterhouwen.info/scripts/cleansys.bat cleansys.bat
 
 :nettools
 cls
-echo          Windows Network Tools
-echo.
+echo.         
+echo ^|-------------------------------------------------^|
+echo ^|                 Network Tools                  -^|
 echo ^|--------------------------------------------------^|
 echo ^|                                                  ^|
 echo ^| 1. Firewall Settings Menu                        ^|
