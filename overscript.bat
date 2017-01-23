@@ -26,7 +26,7 @@ pause
 cls
 echo ^|-------------------------------------------------^|
 echo ^|      Welkom in de all-in-one batch toolkit!     ^|
-echo ^|				Made by Pieter and Roland           ^|
+echo ^|             Made by Pieter and Roland           ^|
 echo ^|-------------------------------------------------^|
 echo.  
 echo 1. Windows System Tools                         
@@ -55,7 +55,7 @@ rem het uitvoeren van de code.
 cls
 echo.
 echo ^|-------------------------------------------------^|            
-echo ^|            Windows System Tools menu    		^|
+echo ^|            Windows System Tools menu            ^|
 echo ^|-------------------------------------------------^|
 echo.                                                   
 echo 1. Fast Universal Cleaning Kit                   
@@ -82,12 +82,13 @@ cls
 echo.         
 echo ^|-------------------------------------------------^|
 echo ^|                 Network Tools                  -^|
-echo ^|--------------------------------------------------^|
-echo ^|                                                  ^|
-echo ^| 1. Firewall Settings Menu                        ^|
-echo ^| 2. Add IP to network interface                   ^|
-echo ^|                                                  ^|
-echo ^|--------------------------------------------------^|
+echo ^|-------------------------------------------------^|
+echo.
+echo 1. Firewall Settings Menu
+echo 2. Add IP to network interface
+echo.
+
+
 
 :perm_fail
 echo U heeft niet de goede permissies, start dit programma opnieuw als admin om het te gebruiken.
