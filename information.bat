@@ -2,9 +2,9 @@
 title Information Finder
 cls
 :main_menu
-echo -----------------------------------------------
-echo ^|         System information finder           ^|
-echo -----------------------------------------------
+echo ^|-------------------------------------------------^|
+echo ^|         System information finder               ^|
+echo ^|-------------------------------------------------^|
 echo  Hello %username%!
 echo. 
 echo  1. Hardware information     
@@ -62,9 +62,9 @@ pause
 cls
 
 
-echo -----------------------------------------------
-echo ^|          Network Information                ^|
-echo -----------------------------------------------
+echo ^|-------------------------------------------------^|
+echo ^|          Network Information                    ^|
+echo ^|-------------------------------------------------^|
 echo   External IP: %extip%
 echo.
 echo   Internal IP: %pieter%
@@ -94,9 +94,9 @@ pause
 
 :hwinfo
 cls
-echo ----------------------------------------------
-echo ^|           Hardware information             ^|
-echo ----------------------------------------------
+echo ^|-------------------------------------------------^|
+echo ^|           Hardware information                  ^|
+echo ^|-------------------------------------------------^|
 echo   RAM: %ram%                                
 echo   CPU: %cpu%                                
 echo.

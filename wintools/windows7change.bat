@@ -10,11 +10,10 @@ pause
 exit
 :menu
 cls
-echo ----------------------------------------------------
-echo -                                                  -	
-echo - LET OP: U MOET DE WINDOWS INSTALLATIE CD HEBBEN! -
-echo -                                                  -
-echo ----------------------------------------------------
+echo.
+echo ^|-------------------------------------------------^|
+echo ^| LET OP: U MOET DE WINDOWS INSTALLATIE CD HEBBEN!^|
+echo ^|-------------------------------------------------^|
 echo.
 echo Uw geinstalleerde Windows versie is momenteel:
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName

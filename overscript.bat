@@ -31,10 +31,7 @@ echo ^|-------------------------------------------------^|
 echo.  
 echo 1. Windows System Tools                         
 echo 2. Hardware information/tools                   
-echo 3. Network Tools                                
-echo                                                               
-echo                                                  
-echo 
+echo 3. Network Tools
 echo.
 rem Het volgende commando maakt een variabele aan genaamd choice, wat dus een cijfer van 1 tot 3 moet bevatten.
 set /p choice=Maak uw keuze:
