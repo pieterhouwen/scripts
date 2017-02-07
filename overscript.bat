@@ -164,7 +164,7 @@ goto nettools
 
 :perm_fail
 echo Permissions inadequate, trying again as admin.
-rem Het volgende commando probeert met powershell het huidige script nogmaals te starten (%0), maar dit keer als admin.
+rem The following command tries to run itself (%0) as admin.
 powershell "saps -filepath %0 -verb runas"
 goto end
 
