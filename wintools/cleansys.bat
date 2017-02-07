@@ -6,7 +6,7 @@ net session >nul 2>&1
 if %errorLevel% == 0 goto perm_success 
 echo Failure: Current permissions inadequate. Trying again as admin.
 powershell "saps -filepath %0 -verb runas"
-exit
+goto end
 :perm_success
 echo Cleaning Temporary Internet Files
 del "%userprofile%\appdata\local\microsoft\windows\temporary internet files\"*.* /f /q /s >nul 2>&1
@@ -31,8 +31,7 @@ del %windir%\SoftwareDistribution\Datastore\*.* /f /q /s >nul 2>&1
 del %windir%\SoftwareDistribution\AuthCabs\*.* /f /q /s >nul 2>&1
 echo Cleaning is done.
 cls
-echo Phase 1 complete. Press any key to continue to Phase 2.
-pause >nul
+echo Phase 1 complete. Starting Phase 2
 cls
 echo Beginning Phase 2 . . .
 echo.
@@ -57,5 +56,5 @@ REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explore
 REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Compress Old Files" /v StateFlags0011 /f >nul 2>&1
 REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Content Indexer Cleaner" /v StateFlags0011 /f >nul 2>&1
 REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Previous Installations" /v StateFlags0011 /t REG_DWORD /d 0x02 /f >nul 2>&1
-:perm_fail
-exit
+
+:end
