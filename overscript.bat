@@ -58,15 +58,19 @@ echo 2. Legacy bootmenu switcher
 echo 3. Outlook profile resetter                      
 echo 4. Windows 7 Version changer (CD/DVD required)   
 echo 5. Show drives and free space                    
-echo 6. System File Checker                                                                          
+echo 6. System File Checker 
+echo 7. Startup checker (add "d" for more info)
+echo 7d. Detailed startup checker                                                                         
 echo.
 set /p choice=Make your choice:
 if %choice% == 1 goto cleansys
 if %choice% == 2 goto bcdedit
 if %choice% == 3 goto outlookreset
-if %choice% == 4 goto win7change
+if %choice% == 4 goto WinVerMenu
 if %choice% == 5 goto showdrives
 if %choice% == 6 goto sfc
+if %choice% == 7 goto startup
+if %choice% == 7d goto startupext
 
 :cleansys
 echo Downloading Fast Universal Cleaning Kit
@@ -103,11 +107,61 @@ echo Press any key to return to the main menu.
 pause >nul
 goto main
 
-:win7change
-rem The following command downloads the windows 7 version changer script through PowerShell.
-powershell (New-Object Net.WebClient).DownloadFile('https://pieterhouwen.info/scripts/win7change.bat', 'C:\Windows\Temp\win7change.bat')
-rem Download complete, proceed to execute.
-C:\Windows\Temp\win7change.bat
+:WinVerMenu
+cls
+echo.
+echo ^|-------------------------------------------------^|
+echo ^| NOTE: YOU NEED THE ORIGINAL WINDOWS INSTALL CD! ^|
+echo ^|      ALSO: THIS ONLY WORKS ON WINDOWS 7!        ^|
+echo ^|-------------------------------------------------^|
+echo.
+echo Your currently installed Windows version is:
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName
+echo Which Windows version do you want to "install"?
+echo Choose 1 voor Windows Professional.
+echo Choose 2 voor Windows Home Premium.
+echo Choose 3 voor Windows Ultimate.
+echo Choose 4 voor Windows Enterprise.
+set /p installver=Make your choice: 
+if %installver% == 1 goto WinPro
+if %installver% == 2 goto WinPrem
+if %installver% == 3 goto WinUlt
+if %installver% == 4 goto WinEnt
+goto wrongchoice
+
+:WinPro
+echo You have chosen Windows 7 Professional
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Professional" /f >nul
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Professional" /f >nul
+pause
+goto end
+
+:WinPrem
+echo You have chosen Windows 7 Home Premium
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 HomePremium" /f >nul
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "HomePremium" /f >nul
+pause
+goto end
+
+:WinUlt
+echo You have chosen Windows 7 Ultimate
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Ultimate" /f >nul
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Ultimate" /f >nul
+pause
+goto end
+
+:WinEnt
+echo You have chosen Windows 7 Enterprise
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Enterprise" /f >nul
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Enterprise" /f >nul
+pause
+goto end
+
+:wrongchoice
+echo Invalid input! Please try again!
+echo Press any key to return to the menu
+pause
+goto WinVerMenu
 echo Done! Press any key to return to the main menu
 pause >nul
 goto main
@@ -123,6 +177,19 @@ goto main
 %windir%\system32\sfc /scannow
 echo Press any key to return to the main menu
 pause >nul
+goto main
+
+:startup
+echo Your current startup items are:
+wmic startup get caption, command
+pause
+goto main
+
+:startupext
+echo Your current startup items are:
+mode 500
+wmic startup get
+pause
 goto main
 
 :hwtools
@@ -142,12 +209,15 @@ pause
 goto hwtools
 
 :mboard_info
-
+wmic baseboard get product,Manufacturer,version,serialnumber
+pause
+goto main
 
 :ram_info
 echo The values provided are in bytes,
 wmic memorychip get speed, capacity
 pause
+goto main
 
 :nettools
 cls
@@ -171,6 +241,7 @@ goto nettools
 rem Code to add and remove firewall rules goes here.
 
 :IPmenu
+cls
 echo.         
 echo ^|-------------------------------------------------^|
 echo ^|Adding/removing IP addresses to network interface^|
