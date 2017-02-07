@@ -13,11 +13,13 @@ echo Download complete, press any key to set the old boot menu.
 bcdedit /set {default} bootmenupolicy legacy
 if %errorlevel% NEQ 0 goto bcd_fail
 pause
-exit
+goto end
 :perm_fail
-echo This program is not running as admin, please restart with the appropriate privileges.
-pause
-exit
+echo This program is not running as admin, restarting as admin.
+powershell "saps -filepath %0 -verb runas"
+goto end
 :bcd_fail
 echo Something went wrong, please check the output of the command and try again.
 pause
+
+:end
