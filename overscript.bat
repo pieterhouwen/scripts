@@ -113,6 +113,7 @@ pause >nul
 goto main
 
 :showdrives
+rem I took the following command from internet. It searches for drives in the machine, and displays the free size.
 for /f "tokens=1-3" %a in ('WMIC LOGICALDISK GET FreeSpace^,Name^,Size ^|FINDSTR /I /V "Name"') do @echo wsh.echo "%b" ^& " free=" ^& FormatNumber^(cdbl^(%a^)/1024/1024/1024, 2^)^& " GiB"^& " size=" ^& FormatNumber^(cdbl^(%c^)/1024/1024/1024, 2^)^& " GiB" > %temp%\tmp.vbs & @if not "%c"=="" @echo( & @cscript //nologo %temp%\tmp.vbs & del %temp%\tmp.vbs 
 echo Press any key to return to the main menu
 pause >nul
@@ -150,6 +151,7 @@ echo.
 echo 1. Firewall Settings Menu
 echo 2. Add IP to network interface
 echo.
+rem I took the following command from internet. It searches for drives in the machine, and displays the free size.
 set /p choice=Make your choice:
 if %choice% == 1 goto fwsettings
 if %choice% == 2 goto ipinterface
@@ -161,6 +163,92 @@ goto nettools
 :fwsettings
 
 :ipinterface
+:IPmenu
+echo.         
+echo ^|-------------------------------------------------^|
+echo ^|Adding/removing IP addresses to network interface^|
+echo ^|-------------------------------------------------^|
+echo.
+echo Please specify if you want to add or remove an address.
+echo.
+echo 1: Add an IP address to an interface.
+echo 2: Remove an IP address from an interface.
+echo 3: Show current IP configuration.
+echo.
+set /p choice=Select your choice: 
+if %choice% == 1 goto add
+if %choice% == 2 goto removeaddr
+echo Incorrect choice, please try again.
+pause
+goto IPmenu
+
+:removeaddr
+netsh interface ipv4 show interfaces
+echo.
+echo Please type the full name of the interface you want to remove an IP from: 
+echo.
+echo You can also choose to reset the entire IP-stack, but this will only work again if you restart the computer.
+echo To do this, type "reset" at the IP input field.
+set /p interface=Please type the name of the interface you want to remove an IP from:
+set /p ip=Please type in the IP address you wish to remove: 
+if %ip% == "reset" goto rstinterface
+netsh interface ipv4 delete address "%interface%" addr=%ip% gateway=all
+if %errorlevel% == 1 goto error
+goto noerror
+
+:rstinterface
+netsh interface ipv4 reset
+echo Computer must be rebooted for changes to take effect. Do that now?
+set /p restart=Restart computer? (Y/N):
+if %restart% == "Y" shutdown -r -t 00
+if %restart% == "y" shutdown -r -t 00
+if %restart% == "N" echo Shutdown cancelled.
+if %restart% == "n" echo Shutdown cancelled.
+pause
+goto end
+
+:add
+echo.
+netsh interface ipv4 show interfaces
+echo.
+set /p interface=Please type the name of the interface you want to add an IP to: 
+set /p ip=Please enter the IP you want to add: 
+set /p subnet=Enter subnetmask (default 255.255.255.0): 
+if %subnet% == "" goto nosubnet
+if %ip% == "" goto noip
+pause
+goto IPmenu
+
+:subnet
+netsh interface ipv4 add address "%interface%" %ip% %subnet%
+if %errorlevel% == 1 goto error
+goto noerror
+
+:nosubnet
+netsh interface ipv4 add address "%interface%" %ip% 255.255.255.0
+pause
+goto noerror
+
+:noip
+echo You haven't given an IP address, please try again!
+goto add
+
+:error
+echo Invalid configuration, please try again.
+pause
+cls
+goto IPmenu
+
+:noerror
+echo Complete!
+pause
+
+:showconfig
+mode 500
+netsh interface ipv4 show addresses
+echo Complete! Press any key to return to the IP menu.
+pause >nul
+goto IPmenu
 
 :perm_fail
 echo Permissions inadequate, trying again as admin.
