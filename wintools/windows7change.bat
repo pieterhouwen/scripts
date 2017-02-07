@@ -1,67 +1,64 @@
 @echo off
-title Windows Version Changer door Roland van Dam
+title Windows Version Changer by Roland van Dam
 
 net session >nul 2>&1
-if %errorlevel% == 0 goto menu
-echo Dit programma wordt niet uitgevoerd als admin, opnieuw starten als admin. . . 
+if %errorlevel% == 0 goto WinVerMenu
+echo Permissions inadequate, trying to run again as admin.
 powershell "saps -filepath %0 -verb runas"
-pause
+goto end
 
-exit
-:menu
+:WinVerMenu
 cls
 echo.
 echo ^|-------------------------------------------------^|
-echo ^| LET OP: U MOET DE WINDOWS INSTALLATIE CD HEBBEN!^|
+echo ^| NOTE: YOU NEED THE ORIGINAL WINDOWS INSTALL CD! ^|
+echo ^|      ALSO: THIS ONLY WORKS ON WINDOWS 7!        ^|
 echo ^|-------------------------------------------------^|
 echo.
-echo Uw geinstalleerde Windows versie is momenteel:
+echo Your currently installed Windows version is:
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName
-echo welke Windows versie wilt Uw installeren?
-echo kies 1 voor Windows Professional.
-echo kies 2 voor Windows Home Premium.
-echo kies 3 voor Windows Ultimate.
-echo kies 4 voor Windows Enterprise.
-set /p windowsinstalleren=Maak uw keuze: 
-if %windowsinstalleren% == 1 goto WinPro
-if %windowsinstalleren% == 2 goto WinPrem
-if %windowsinstalleren% == 3 goto WinUlt
-if %windowsinstalleren% == 4 goto WinEnt
-goto verkeerdekeuze
+echo Which Windows version do you want to "install"?
+echo Choose 1 voor Windows Professional.
+echo Choose 2 voor Windows Home Premium.
+echo Choose 3 voor Windows Ultimate.
+echo Choose 4 voor Windows Enterprise.
+set /p installver=Make your choice: 
+if %installver% == 1 goto WinPro
+if %installver% == 2 goto WinPrem
+if %installver% == 3 goto WinUlt
+if %installver% == 4 goto WinEnt
+goto wrongchoice
+
 :WinPro
-echo U heeft gekozen voor Windows 7 Professional
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Professional" /f >dumpbestand
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Professional" /f >dumpbestand
-
+echo You have chosen Windows 7 Professional
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Professional" /f >nul
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Professional" /f >nul
+pause
 goto end
+
 :WinPrem
-echo U heeft gekozen voor Windows 7 Home Premium
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 HomePremium" /f >dumpbestand
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "HomePremium" /f >dumpbestand
-
+echo You have chosen Windows 7 Home Premium
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 HomePremium" /f >nul
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "HomePremium" /f >nul
+pause
 goto end
+
 :WinUlt
-echo U heeft gekozen voor Windows 7 Ultimate
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Ultimate" /f >dumpbestand
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Ultimate" /f >dumpbestand
-
+echo You have chosen Windows 7 Ultimate
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Ultimate" /f >nul
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Ultimate" /f >nul
+pause
 goto end
+
 :WinEnt
-echo U heeft gekozen voor Windows 7 Enterprise
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Enterprise" /f >dumpbestand
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Enterprise" /f >dumpbestand
-
+echo You have chosen Windows 7 Enterprise
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Enterprise" /f >nul
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Enterprise" /f >nul
+pause
 goto end
-:verkeerdekeuze
-echo U heeft een verkeerde keuze gemaakt!
-echo Druk op een toets om terug te gaan naar het hoofdmenu.
-pause
-goto menu
 
-:end
-echo Complete!
-echo
+:wrongchoice
+echo Invalid input! Please try again!
+echo Press any key to return to the menu
 pause
-del dumpbestand
-REM Ode aan Roland!
-exit
+goto WinVerMenu
