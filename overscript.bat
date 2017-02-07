@@ -71,29 +71,95 @@ if %choice% == 5 goto showdrives
 if %choice% == 6 goto sfc
 
 :cleansys
+echo Downloading Fast Universal Cleaning Kit
+powershell (New-Object Net.WebClient).DownloadFile('https://pieterhouwen.info/scripts/cleansys.bat', 'C:\Windows\Temp\cleansys.bat')
+C:\Windows\Temp\cleansys.bat
+echo Programma voltooid, druk op een toets om terug te keren naar het hoofdmenu.
+pause >nul
+goto main
 
-download cleansys https://pieterhouwen.info/scripts/cleansys.bat cleansys.bat
+:bcdedit
+C:\Windows\system32\bcdedit /set {default} bootmenupolicy legacy
+echo Voltooid! U kunt vanaf nu weer de F8 knop gebruiken tijdens het opstarten.
+echo Druk op een toets om terug te keren naar het hoofdmenu.
+pause >nul
+goto main
+
+:outlookreset
+echo Gebruik het configuratiepaneel om de gewenste profielen eerst te verwijderen. De bestanden doen we later.
+pause
+control.exe mlcfg32.cpl
+set appdata=%userprofile%\appdata
+cd %AppData%\Local\Microsoft\Outlook
+del *.* /f /s /q
+echo Klaar! U kunt nu Outlook weer instellen.
+echo Druk op een toets om terug te gaan naar het hoofdmenu.
+pause >nul
+goto main
+
+:win7change
+powershell (New-Object Net.WebClient).DownloadFile('https://pieterhouwen.info/scripts/win7change.bat', 'C:\Windows\Temp\win7change.bat')
+C:\Windows\Temp\win7change.bat
+echo Klaar! Druk op een toets om terug te gaan naar 't hoofdmenu.
+pause >nul
+goto main
+
+:showdrives
+for /f "tokens=1-3" %a in ('WMIC LOGICALDISK GET FreeSpace^,Name^,Size ^|FINDSTR /I /V "Name"') do @echo wsh.echo "%b" ^& " free=" ^& FormatNumber^(cdbl^(%a^)/1024/1024/1024, 2^)^& " GiB"^& " size=" ^& FormatNumber^(cdbl^(%c^)/1024/1024/1024, 2^)^& " GiB" > %temp%\tmp.vbs & @if not "%c"=="" @echo( & @cscript //nologo %temp%\tmp.vbs & del %temp%\tmp.vbs 
+echo Druk op een toets om terug te gaan naar het hoofdmenu.
+pause >nul
+goto main
+
+:sfc
+%windir%\system32\sfc /scannow
+echo Druk op een toets om terug te gaan naar het hoofdmenu.
+pause >nul
+goto main
+
+:hwtools
+cls
+echo ^|-------------------------------------------------^|            
+echo ^|           Hardware information tools            ^|
+echo ^|-------------------------------------------------^|
+echo.
+echo 1. Moederbord informatie
+echo 2. RAM informatie
+echo.
+set /p choice=Maak uw keuze:
+if %choice% == 1 goto mboard_info
+if %choice% == 2 goto ram_info
+echo Verkeerde keuze gemaakt, probeer het nog eens!
+pause
+goto hwtools
 
 :nettools
 cls
 echo.         
 echo ^|-------------------------------------------------^|
-echo ^|                 Network Tools                  -^|
+echo ^|                 Network Tools                   ^|
 echo ^|-------------------------------------------------^|
 echo.
 echo 1. Firewall Settings Menu
 echo 2. Add IP to network interface
 echo.
+set /p choice=Maak uw keuze:
+if %choice% == 1 goto fwsettings
+if %choice% == 2 goto ipinterface
+echo Verkeerde keuze gemaakt, probeer het nog eens!
+pause
+goto nettools
 
 
+:fwsettings
+
+:ipinterface
 
 :perm_fail
-echo U heeft niet de goede permissies, start dit programma opnieuw als admin om het te gebruiken.
-echo Druk op een toets om dit programma als admin te starten.
-pause >nul
+echo Permissies zijn niet voldoende! Proberen programma opnieuw te starten als admin.
 rem Het volgende commando probeert met powershell het huidige script nogmaals te starten (%0), maar dit keer als admin.
 powershell "saps -filepath %0 -verb runas"
-exit
-
+goto end
 
 :download_prog
+
+:end
