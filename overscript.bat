@@ -114,8 +114,8 @@ goto main
 
 :showdrives
 rem I took the following command from internet. It searches for drives in the machine, and displays the free size.
-for /f "tokens=1-3" %a in ('WMIC LOGICALDISK GET FreeSpace^,Name^,Size ^|FINDSTR /I /V "Name"') do @echo wsh.echo "%b" ^& " free=" ^& FormatNumber^(cdbl^(%a^)/1024/1024/1024, 2^)^& " GiB"^& " size=" ^& FormatNumber^(cdbl^(%c^)/1024/1024/1024, 2^)^& " GiB" > %temp%\tmp.vbs & @if not "%c"=="" @echo( & @cscript //nologo %temp%\tmp.vbs & del %temp%\tmp.vbs 
-echo Press any key to return to the main menu
+for /f "tokens=1-3" %a in ('WMIC LOGICALDISK GET FreeSpace^,Name^,Size ^|FINDSTR /I /V "mdName"') do @echo wsh.echo "%b" ^& " free=" ^& FormatNumber^(cdbl^(%a^)/1024/1024/1024, 2^)^& " GiB"^& " size=" ^& FormatNumber^(cdbl^(%c^)/1024/1024/1024, 2^)^& " GiB" > %temp%\tmp.vbs & @if not "%c"=="" @echo( & @cscript //nologo %temp%\tmp.vbs & del %temp%\tmp.vbs 
+echo Press any key to return to the main menu. 
 pause >nul
 goto main
 
@@ -141,6 +141,14 @@ echo Invalid input! Please try again.
 pause
 goto hwtools
 
+:mboard_info
+
+
+:ram_info
+echo The values provided are in bytes,
+wmic memorychip get speed, capacity
+pause
+
 :nettools
 cls
 echo.         
@@ -154,15 +162,14 @@ echo.
 rem I took the following command from internet. It searches for drives in the machine, and displays the free size.
 set /p choice=Make your choice:
 if %choice% == 1 goto fwsettings
-if %choice% == 2 goto ipinterface
+if %choice% == 2 goto IPmenu
 echo Invalid input! Please try again.
 pause
 goto nettools
 
-
 :fwsettings
+rem Code to add and remove firewall rules goes here.
 
-:ipinterface
 :IPmenu
 echo.         
 echo ^|-------------------------------------------------^|
@@ -216,6 +223,7 @@ set /p ip=Please enter the IP you want to add:
 set /p subnet=Enter subnetmask (default 255.255.255.0): 
 if %subnet% == "" goto nosubnet
 if %ip% == "" goto noip
+goto subnet
 pause
 goto IPmenu
 
@@ -242,6 +250,7 @@ goto IPmenu
 :noerror
 echo Complete!
 pause
+goto main
 
 :showconfig
 mode 500
