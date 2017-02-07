@@ -109,7 +109,8 @@ rem Current IP
 rem Default gateway
 rem username
 rem RAM (bytes total + speed)
-exit
+goto end
+
 :extiperror
 powershell.exe -command (new-object System.Net.WebClient).DownloadFile('http://myexternalip.com/raw', '$Env:temp\extip.txt')
 if %errorlevel% NEQ 0 goto end
