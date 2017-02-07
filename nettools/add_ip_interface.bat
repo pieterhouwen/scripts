@@ -57,4 +57,3 @@ goto menu
 :noerror
 echo Complete!
 pause
-exit
