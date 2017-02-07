@@ -2,30 +2,31 @@
 cls
 title Extreme OverScript
 echo Checking permissions....
-rem Het volgende commando doet eigenlijk niks, maar het kan niet uitgevoerd worden als je niet admin bent, dus gebruiken we dat als check.
+rem The following command doesn't really do anything except requiring admin permissions to run it so we use it as a check
 net session 2>&1 >nul
-rem 2>&1 betekent dat de tweede outputstroom (de errors) naar de eerste outputstroom wordt geleid (normale output)
-rem >nul betekent dat hij de normale outputstroom wegschrijft naar een niet-bestaand bestand.
+rem 2>&1 means that the second outputstream (the errors) is redirected to the first outputstream (the normal output)
+rem >nul means that the normal outputstream gets redirected to "nul" which is a non-existing file. (to dispose of output).
 if %errorlevel% == 0 goto perm_success
-rem Hier checken we of de opdracht goed is gegaan, als de exitcode 0 is betekent dat dat er geen fouten zijn voorgekomen, dus wordt
-rem hij als administrator gedraaid, dus slaan we het volgende stuk over, en gaan we direct naar 't hoofdmenu.
+rem Here we check if the previous command executed succesfully, if so, go to the label named perm_success.
 goto perm_fail
-rem Hier geven we aan dat als hij op dit punt is aangekomen het programma blijkbaar niet wordt uitgevoerd als admin, dus leiden we hem
-rem om naar de onderkant van dit script, waar hij hem opnieuw probeert te starten als admin. 
-rem LET OP: Als er spaties in de maplocatie zitten zal het niet werken om hem als admin te starten. 
+rem If the program reaches this line it means that the errorlevel was not 0, which means that the program wasn't run as admin.
+rem NOTE: Starting this program again as admin won't work if there are spaces in the file path.
 
 :perm_success
 cls
-rem cls staat voor CLearScreen, wat dus het scherm leegmaakt.
-rem Als we hier aankomen betekent 't dus dat hij wordt uitgevoerd als admin.
+rem cls means CLearScreen, which just empties the screen of all output.
+rem If we are at this point, it means that the program is being run as admin.
 if exist %temp%\download.bat goto main
+rem Check if downloader is present, if so, continue to the main menu.
 bitsadmin /transfer downloader /download /priority normal https://github.com/pieterhouwen/scripts/tree/master/nettools/download.bat %temp%\download.bat
+rem Downloader is not present, so download it.
+rem NOTE: BitsAdmin won't work on GitHub due to that GitHub doesn't return file sizes, which is required for BitsAdmin to work.
 pause
 
 :main
 cls
 echo ^|-------------------------------------------------^|
-echo ^|      Welkom in de all-in-one batch toolkit!     ^|
+echo ^|     Welcome to the all-in-one batch toolkit!    ^|
 echo ^|             Made by Pieter and Roland           ^|
 echo ^|-------------------------------------------------^|
 echo.  
@@ -33,20 +34,17 @@ echo 1. Windows System Tools
 echo 2. Hardware information/tools                   
 echo 3. Network Tools
 echo.
-rem Het volgende commando maakt een variabele aan genaamd choice, wat dus een cijfer van 1 tot 3 moet bevatten.
-set /p choice=Maak uw keuze:
+rem The following command makes a variable named choice which will contain 1 ,2 or 3.
+set /p choice=Make your choice:
 if %choice% == 1 goto winsystools
 if %choice% == 2 goto hwtools
 if %choice% == 3 goto nettools
-rem Als de code hier aankomt betekent het dus dat er niet op 1,2 of 3 is gedrukt, dus is het foute invoer, dus geven we
-rem de gebruiker een melding en gaan weer naar 't hoofdmenu.
-echo Onjuiste invoer! Probeer het opnieuw.
+rem If the CMD reaches this point, it means that 1 , 2 or 3 wasn't pressed, so we return an error.
+echo Invalid input, please try again!
 pause
-rem pause geeft een bericht weer dat je op een toets moet drukken om door te gaan.
+rem pause returns the message Press any key to continue, giving the user a chance to read the messages printed on the screen.
 goto main
-
-rem Een woord met een : ervoor heet een label, dit zijn handvaten voor CMD waar hij heen moet springen om verder te gaan met
-rem het uitvoeren van de code.
+rem As invalid input was detected, return to the menu.
 
 :winsystools
 cls
@@ -62,7 +60,7 @@ echo 4. Windows 7 Version changer (CD/DVD required)
 echo 5. Show drives and free space                    
 echo 6. System File Checker                                                                          
 echo.
-set /p choice=Maak uw keuze:
+set /p choice=Make your choice:
 if %choice% == 1 goto cleansys
 if %choice% == 2 goto bcdedit
 if %choice% == 3 goto outlookreset
@@ -74,45 +72,55 @@ if %choice% == 6 goto sfc
 echo Downloading Fast Universal Cleaning Kit
 powershell (New-Object Net.WebClient).DownloadFile('https://pieterhouwen.info/scripts/cleansys.bat', 'C:\Windows\Temp\cleansys.bat')
 C:\Windows\Temp\cleansys.bat
-echo Programma voltooid, druk op een toets om terug te keren naar het hoofdmenu.
+echo Program complete, press any key to return to the main menu.
 pause >nul
+rem pause >nul is used to pause the execution of the program without giving the message Press any key to continue, which is used when
+rem we want to show our own message to press a key.
 goto main
 
 :bcdedit
-C:\Windows\system32\bcdedit /set {default} bootmenupolicy legacy
-echo Voltooid! U kunt vanaf nu weer de F8 knop gebruiken tijdens het opstarten.
-echo Druk op een toets om terug te keren naar het hoofdmenu.
+rem The following command re-enables the good old F8 boot menu at Windows startup.
+%windir%\system32\bcdedit /set {default} bootmenupolicy legacy
+echo Complete! You can now use the old F8 menu while booting.
+echo Press any key to return to the main menu.
 pause >nul
 goto main
 
 :outlookreset
-echo Gebruik het configuratiepaneel om de gewenste profielen eerst te verwijderen. De bestanden doen we later.
+echo Use the control panel to remove the outlook profiles, the files we'll do later.
 pause
+rem The following command gets the Mail settings menu from the old Control Panel.
 control.exe mlcfg32.cpl
+rem The variable named appdata typically refers to C:\Users\<user>\AppData\Roaming, but because we want to get a level higher
+rem we should edit the variable.
 set appdata=%userprofile%\appdata
 cd %AppData%\Local\Microsoft\Outlook
+rem Now we're in the Outlook folder which holds the configuration files of the Outlook users.
+rem We can safely remove all contents of this folder.
 del *.* /f /s /q
-echo Klaar! U kunt nu Outlook weer instellen.
-echo Druk op een toets om terug te gaan naar het hoofdmenu.
+echo Done! You can now setup your Outlook account for the first time again.
+echo Press any key to return to the main menu.
 pause >nul
 goto main
 
 :win7change
+rem The following command downloads the windows 7 version changer script through PowerShell.
 powershell (New-Object Net.WebClient).DownloadFile('https://pieterhouwen.info/scripts/win7change.bat', 'C:\Windows\Temp\win7change.bat')
+rem Download complete, proceed to execute.
 C:\Windows\Temp\win7change.bat
-echo Klaar! Druk op een toets om terug te gaan naar 't hoofdmenu.
+echo Done! Press any key to return to the main menu
 pause >nul
 goto main
 
 :showdrives
 for /f "tokens=1-3" %a in ('WMIC LOGICALDISK GET FreeSpace^,Name^,Size ^|FINDSTR /I /V "Name"') do @echo wsh.echo "%b" ^& " free=" ^& FormatNumber^(cdbl^(%a^)/1024/1024/1024, 2^)^& " GiB"^& " size=" ^& FormatNumber^(cdbl^(%c^)/1024/1024/1024, 2^)^& " GiB" > %temp%\tmp.vbs & @if not "%c"=="" @echo( & @cscript //nologo %temp%\tmp.vbs & del %temp%\tmp.vbs 
-echo Druk op een toets om terug te gaan naar het hoofdmenu.
+echo Press any key to return to the main menu
 pause >nul
 goto main
 
 :sfc
 %windir%\system32\sfc /scannow
-echo Druk op een toets om terug te gaan naar het hoofdmenu.
+echo Press any key to return to the main menu
 pause >nul
 goto main
 
@@ -122,13 +130,13 @@ echo ^|-------------------------------------------------^|
 echo ^|           Hardware information tools            ^|
 echo ^|-------------------------------------------------^|
 echo.
-echo 1. Moederbord informatie
-echo 2. RAM informatie
+echo 1. Motherboard information
+echo 2. RAM information
 echo.
-set /p choice=Maak uw keuze:
+set /p choice=Make your choice:
 if %choice% == 1 goto mboard_info
 if %choice% == 2 goto ram_info
-echo Verkeerde keuze gemaakt, probeer het nog eens!
+echo Invalid input! Please try again.
 pause
 goto hwtools
 
@@ -142,10 +150,10 @@ echo.
 echo 1. Firewall Settings Menu
 echo 2. Add IP to network interface
 echo.
-set /p choice=Maak uw keuze:
+set /p choice=Make your choice:
 if %choice% == 1 goto fwsettings
 if %choice% == 2 goto ipinterface
-echo Verkeerde keuze gemaakt, probeer het nog eens!
+echo Invalid input! Please try again.
 pause
 goto nettools
 
@@ -155,7 +163,7 @@ goto nettools
 :ipinterface
 
 :perm_fail
-echo Permissies zijn niet voldoende! Proberen programma opnieuw te starten als admin.
+echo Permissions inadequate, trying again as admin.
 rem Het volgende commando probeert met powershell het huidige script nogmaals te starten (%0), maar dit keer als admin.
 powershell "saps -filepath %0 -verb runas"
 goto end
