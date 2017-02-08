@@ -30,6 +30,8 @@ echo ^|     Welcome to the all-in-one batch toolkit!    ^|
 echo ^|             Made by Pieter and Roland           ^|
 echo ^|-------------------------------------------------^|
 echo.  
+echo Hello %username%! And welcome to the toolkit!
+echo.
 echo 1. Windows System Tools                         
 echo 2. Hardware information/tools                   
 echo 3. Network Tools
