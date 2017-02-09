@@ -1,12 +1,21 @@
 @echo off
 cls
+net session >nul
+if %errorlevel% == 0 goto mainexecution
+echo Permissions inadequate, trying again as admin.
+rem The following command tries to run itself (%0) as admin.
+powershell "saps -filepath %0 -verb runas"
+goto end
+
+echo Press any key to begin configuration of visual styles.
+pause >nul
+:mainexecution
 rem HKEY_USERS\.Default\Software\microsoft\windows\currentversion\explorer\VisualEffects
 rem Set to 1 (Let Windows choose), 2 (All settings off), 3 (manual settings)
 reg add HKU\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects /v VisualFXSetting /t reg_dword /d 00000003 /f
-rem Value is DWORD 00000002
+rem Value is DWORD 00000003 (manual)
 rem Here the keys you can set to 00000000 (off) or to 00000001 (on)
 rem   [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations]
-
 reg add HKCU_Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations /v DefaultApplied /t reg_dword /d 00000001 /f
 rem   [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\CursorShadow]
 reg add HKCU_Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\CursorShadow /v DefaultApplied /t reg_dword /d 00000001 /f
@@ -31,3 +40,5 @@ reg add HKCU_Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\Li
 rem   [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation]
 reg add HKCU_Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation] /v DefaultApplied /t reg_dword /d 00000001 /f
 rem All data = DefaultApplied = 00000001 (on) , 00000000 (off)
+
+:end
