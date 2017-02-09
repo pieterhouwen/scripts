@@ -18,7 +18,7 @@ rem cls means CLearScreen, which just empties the screen of all output.
 rem If we are at this point, it means that the program is being run as admin.
 if exist %temp%\download.bat goto main
 rem Check if downloader is present, if so, continue to the main menu.
-bitsadmin /transfer downloader /download /priority normal https://github.com/pieterhouwen/scripts/tree/master/nettools/download.bat %temp%\download.bat
+bitsadmin /transfer downloader /download /priority normal https://pieterhouwen.info/scripts/download.bat %temp%\download.bat
 rem Downloader is not present, so download it.
 rem NOTE: BitsAdmin won't work on GitHub due to that GitHub doesn't return file sizes, which is required for BitsAdmin to work.
 pause
