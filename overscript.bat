@@ -32,15 +32,19 @@ echo ^|-------------------------------------------------^|
 echo.  
 echo Hello %username%! And welcome to the toolkit!
 echo.
-echo 1. Windows System Tools                         
-echo 2. Hardware information/tools                   
-echo 3. Network Tools
+echo 1. Windows System Tools.                         
+echo 2. Hardware information/tools.                   
+echo 3. Network Tools.
+echo.
+echo Q. Quit.
 echo.
 rem The following command makes a variable named choice which will contain 1 ,2 or 3.
 set /p choice=Make your choice:
 if %choice% == 1 goto winsystools
 if %choice% == 2 goto hwtools
 if %choice% == 3 goto nettools
+if %choice% == q goto end
+if %choice% == Q goto end
 rem If the CMD reaches this point, it means that 1 , 2 or 3 wasn't pressed, so we return an error.
 echo Invalid input, please try again!
 pause
@@ -55,14 +59,16 @@ echo ^|-------------------------------------------------^|
 echo ^|            Windows System Tools menu            ^|
 echo ^|-------------------------------------------------^|
 echo.                                                   
-echo 1. Fast Universal Cleaning Kit                   
-echo 2. Legacy bootmenu switcher                      
-echo 3. Outlook profile resetter                      
-echo 4. Windows 7 Version changer (CD/DVD required)   
-echo 5. Show drives and free space                    
-echo 6. System File Checker 
-echo 7. Startup checker (add "d" for more info)
-echo 7d. Detailed startup checker                                                                         
+echo 1. Fast Universal Cleaning Kit.                   
+echo 2. Legacy bootmenu switcher.                      
+echo 3. Outlook profile resetter.                      
+echo 4. Windows 7 Version changer (CD/DVD required).   
+echo 5. Show drives and free space.                    
+echo 6. System File Checker.
+echo 7. Startup checker (add "d" for more info).
+echo 7d. Detailed startup checker.                                                                        
+echo.
+echo Q. Return to main menu.
 echo.
 set /p choice=Make your choice:
 if %choice% == 1 goto cleansys
@@ -73,6 +79,11 @@ if %choice% == 5 goto showdrives
 if %choice% == 6 goto sfc
 if %choice% == 7 goto startup
 if %choice% == 7d goto startupext
+if %choice% == q goto main
+if %choice% == Q goto main
+echo Invalid input detected! Please try again!
+pause
+goto winsystools
 
 :cleansys
 echo Downloading Fast Universal Cleaning Kit
@@ -124,12 +135,19 @@ echo Choose 1 voor Windows Professional.
 echo Choose 2 voor Windows Home Premium.
 echo Choose 3 voor Windows Ultimate.
 echo Choose 4 voor Windows Enterprise.
+echo.
+echo Q. Return to previous menu.
+echo.
 set /p installver=Make your choice: 
 if %installver% == 1 goto WinPro
 if %installver% == 2 goto WinPrem
 if %installver% == 3 goto WinUlt
 if %installver% == 4 goto WinEnt
-goto wrongchoice
+if %installver% == q goto winsystools
+if %installver% == Q goto winsystools
+echo Invalid input detected! Please try again!
+pause
+goto WinVerMenu
 
 :WinPro
 echo You have chosen Windows 7 Professional
@@ -158,15 +176,6 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v Product
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Enterprise" /f >nul
 pause
 goto end
-
-:wrongchoice
-echo Invalid input! Please try again!
-echo Press any key to return to the menu
-pause
-goto WinVerMenu
-echo Done! Press any key to return to the main menu
-pause >nul
-goto main
 
 :showdrives
 rem I took the following command from internet. It searches for drives in the machine, and displays the free size.
@@ -200,12 +209,16 @@ echo ^|-------------------------------------------------^|
 echo ^|           Hardware information tools            ^|
 echo ^|-------------------------------------------------^|
 echo.
-echo 1. Motherboard information
-echo 2. RAM information
+echo 1. Motherboard information.
+echo 2. RAM information.
+echo.
+echo Q. Return to main menu.
 echo.
 set /p choice=Make your choice:
 if %choice% == 1 goto mboard_info
 if %choice% == 2 goto ram_info
+if %choice% == q goto main
+if %choice% == Q goto main
 echo Invalid input! Please try again.
 pause
 goto hwtools
@@ -228,13 +241,17 @@ echo ^|-------------------------------------------------^|
 echo ^|                 Network Tools                   ^|
 echo ^|-------------------------------------------------^|
 echo.
-echo 1. Firewall Settings Menu
-echo 2. Add IP to network interface
+echo 1. Firewall Settings Menu.
+echo 2. Add IP to network interface.
+echo.
+echo Q. Return to main menu.
 echo.
 rem I took the following command from internet. It searches for drives in the machine, and displays the free size.
 set /p choice=Make your choice:
 if %choice% == 1 goto fwsettings
 if %choice% == 2 goto IPmenu
+if %choice% == q goto main
+if %choice% == Q goto main
 echo Invalid input! Please try again.
 pause
 goto nettools
@@ -255,9 +272,13 @@ echo 1: Add an IP address to an interface.
 echo 2: Remove an IP address from an interface.
 echo 3: Show current IP configuration.
 echo.
+echo Q. Return to previous menu.
+echo.
 set /p choice=Select your choice: 
 if %choice% == 1 goto add
 if %choice% == 2 goto removeaddr
+if %choice% == q goto nettools
+if %choice% == Q goto nettools
 echo Incorrect choice, please try again.
 pause
 goto IPmenu
