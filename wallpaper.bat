@@ -10,8 +10,8 @@ goto end
 :mainexecution
 echo Note: All users should be able to view the image or else the background will be empty!
 set /p location=Specify where the image is located (example C:\image.jpg):
-reg add HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System /v Wallpaper /t reg_sz /d %location%
-reg add HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System /v WallpaperStyle /t reg_sz /d 2
+reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System /v Wallpaper /t reg_sz /d %location%
+reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System /v WallpaperStyle /t reg_sz /d 2
 pause
 
 :end
