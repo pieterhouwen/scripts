@@ -59,17 +59,17 @@ echo ^|-------------------------------------------------^|
 echo ^|            Windows System Tools menu            ^|
 echo ^|-------------------------------------------------^|
 echo.                                                   
-echo 1. Fast Universal Cleaning Kit.                   
-echo 2. Legacy bootmenu switcher.                      
-echo 3. Outlook profile resetter.                      
-echo 4. Windows 7 Version changer (CD/DVD required).   
-echo 5. Show drives and free space.                    
-echo 6. System File Checker.
-echo 7. Startup checker (add "d" for more info).
+echo 1.  Fast Universal Cleaning Kit.                   
+echo 2.  Legacy bootmenu switcher.                      
+echo 3.  Outlook profile resetter.                      
+echo 4.  Windows 7 Version changer (CD/DVD required).   
+echo 5.  Show drives and free space.                    
+echo 6.  System File Checker.
+echo 7.  Startup checker (add "d" for more info).
 echo 7d. Detailed startup checker.
-echo 8. Force Desktop Wallpaper.                                                                        
+echo 8.  Force Desktop Wallpaper.                                                                        
 echo.
-echo Q. Return to main menu.
+echo Q.  Return to main menu.
 echo.
 set /p choice=Make your choice:
 if %choice% == 1 goto cleansys
