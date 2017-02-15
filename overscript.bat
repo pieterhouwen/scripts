@@ -66,7 +66,8 @@ echo 4. Windows 7 Version changer (CD/DVD required).
 echo 5. Show drives and free space.                    
 echo 6. System File Checker.
 echo 7. Startup checker (add "d" for more info).
-echo 7d. Detailed startup checker.                                                                        
+echo 7d. Detailed startup checker.
+echo 8. Force Desktop Wallpaper.                                                                        
 echo.
 echo Q. Return to main menu.
 echo.
@@ -79,6 +80,7 @@ if %choice% == 5 goto showdrives
 if %choice% == 6 goto sfc
 if %choice% == 7 goto startup
 if %choice% == 7d goto startupext
+if %choice% == 8 goto wallpaper
 if %choice% == q goto main
 if %choice% == Q goto main
 echo Invalid input detected! Please try again!
@@ -180,28 +182,41 @@ goto end
 :showdrives
 rem I took the following command from internet. It searches for drives in the machine, and displays the free size.
 for /f "tokens=1-3" %a in ('WMIC LOGICALDISK GET FreeSpace^,Name^,Size ^|FINDSTR /I /V "mdName"') do @echo wsh.echo "%b" ^& " free=" ^& FormatNumber^(cdbl^(%a^)/1024/1024/1024, 2^)^& " GiB"^& " size=" ^& FormatNumber^(cdbl^(%c^)/1024/1024/1024, 2^)^& " GiB" > %temp%\tmp.vbs & @if not "%c"=="" @echo( & @cscript //nologo %temp%\tmp.vbs & del %temp%\tmp.vbs 
-echo Press any key to return to the main menu. 
+echo Press any key to return to the previous menu. 
 pause >nul
-goto main
+goto winsystools
 
 :sfc
-%windir%\system32\sfc /scannow
-echo Press any key to return to the main menu
+start %windir%\system32\sfc /scannow
+echo Press any key to return to the previous menu
 pause >nul
-goto main
+goto winsystools
 
 :startup
 echo Your current startup items are:
 wmic startup get caption, command
 pause
-goto main
+goto winsystools
 
 :startupext
 echo Your current startup items are:
 mode 500
 wmic startup get
 pause
-goto main
+goto winsystools
+
+:wallpaper
+echo Note: All users should be able to view the image or else the background will be empty!
+set /p location=Specify where the image is located (example C:\image.jpg):
+echo Windows Registry Editor Version 5.00 >%temp%\wallpaper.reg
+echo. >>%temp%\wallpaper.reg
+echo [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System] >>%temp%\wallpaper.reg
+echo "WallpaperStyle"="2" >>%temp%\wallpaper.reg
+reg import %temp%\wallpaper.reg
+reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System /v Wallpaper /d "%location%" /f /t REG_SZ
+echo Done
+pause
+goto winsystools
 
 :hwtools
 cls
