@@ -113,10 +113,10 @@ control.exe mlcfg32.cpl
 rem The variable named appdata typically refers to C:\Users\<user>\AppData\Roaming, but because we want to get a level higher
 rem we should edit the variable.
 set appdata=%userprofile%\appdata
-cd %AppData%\Local\Microsoft\Outlook
-rem Now we're in the Outlook folder which holds the configuration files of the Outlook users.
-rem We can safely remove all contents of this folder.
-del *.* /f /s /q
+cd %AppData%\Local\Microsoft\Outlook && del *.* /f /s /q
+rem The above commands are actually 2 seperate commands: CD and DEL.
+rem because of the && the DEL command only runs if the previous command was succesful.
+rem This can be used to make sure we don't end up deleting something we don't want to.
 echo Done! You can now setup your Outlook account for the first time again.
 echo Press any key to return to the main menu.
 pause >nul
@@ -156,28 +156,28 @@ echo You have chosen Windows 7 Professional
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Professional" /f >nul
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Professional" /f >nul
 pause
-goto end
+goto winsystools
 
 :WinPrem
 echo You have chosen Windows 7 Home Premium
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 HomePremium" /f >nul
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "HomePremium" /f >nul
 pause
-goto end
+goto winsystools
 
 :WinUlt
 echo You have chosen Windows 7 Ultimate
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Ultimate" /f >nul
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Ultimate" /f >nul
 pause
-goto end
+goto winsystools
 
 :WinEnt
 echo You have chosen Windows 7 Enterprise
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Enterprise" /f >nul
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Enterprise" /f >nul
 pause
-goto end
+goto winsystools
 
 :showdrives
 rem I took the following command from internet. It searches for drives in the machine, and displays the free size.
@@ -208,11 +208,20 @@ goto winsystools
 :wallpaper
 echo Note: All users should be able to view the image or else the background will be empty!
 set /p location=Specify where the image is located (example C:\image.jpg):
+rem Now we're going to write a registry file, this is used because in some cases there is no System subkey
+rem in the registry and through the normal registry commands this cannot be added.
 echo Windows Registry Editor Version 5.00 >%temp%\wallpaper.reg
+rem The above line is the header which tells Windows it's dealing with a registry file (.reg)
 echo. >>%temp%\wallpaper.reg
+rem Add a empty line.
 echo [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System] >>%temp%\wallpaper.reg
+rem The above command specifies in which subkey in the registry we are going to be working.
+rem If the structure does not exist, it will create it for us.
 echo "WallpaperStyle"="2" >>%temp%\wallpaper.reg
 reg import %temp%\wallpaper.reg
+rem Import our registry key, so the subkey will be created, then we can use conventional methods to add our own key
+rem for the background.
+
 reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System /v Wallpaper /d "%location%" /f /t REG_SZ
 echo Done
 pause
@@ -321,13 +330,13 @@ if %restart% == "y" shutdown -r -t 00
 if %restart% == "N" echo Shutdown cancelled.
 if %restart% == "n" echo Shutdown cancelled.
 pause
-goto end
+goto nettools
 
 :add
 echo.
 netsh interface ipv4 show interfaces
 echo.
-set /p interface=Please type the name of the interface you want to add an IP to: 
+set /p interface=Please type the full name of the interface you want to add an IP to: 
 set /p ip=Please enter the IP you want to add: 
 set /p subnet=Enter subnetmask (default 255.255.255.0): 
 if %subnet% == "" goto nosubnet
