@@ -221,6 +221,8 @@ echo "WallpaperStyle"="2" >>%temp%\wallpaper.reg
 reg import %temp%\wallpaper.reg
 rem Import our registry key, so the subkey will be created, then we can use conventional methods to add our own key
 rem for the background.
+rem We use reg import because even though the .reg file can be added by starting (or double-clicking it) we want to suppress
+rem the warning that messing with the registry can be dangerous.
 
 reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System /v Wallpaper /d "%location%" /f /t REG_SZ
 echo Done
@@ -318,7 +320,8 @@ set /p interface=Please type the name of the interface you want to remove an IP 
 set /p ip=Please type in the IP address you wish to remove: 
 if %ip% == "reset" goto rstinterface
 netsh interface ipv4 delete address "%interface%" addr=%ip% gateway=all
-if %errorlevel% == 1 goto error
+if %errorlevel% NEQ 0 goto error
+rem We use NEQ (Not EQual) because a program can have many exit codes, but everything non-zero is an error.
 goto noerror
 
 :rstinterface
@@ -347,7 +350,7 @@ goto IPmenu
 
 :subnet
 netsh interface ipv4 add address "%interface%" %ip% %subnet%
-if %errorlevel% == 1 goto error
+if %errorlevel% NEQ 0 goto error
 goto noerror
 
 :nosubnet
