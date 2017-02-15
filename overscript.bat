@@ -281,7 +281,7 @@ goto nettools
 
 :fwsettings
 rem Code to add and remove firewall rules goes here.
-rem test
+rem Well maybe not..
 
 :IPmenu
 cls
