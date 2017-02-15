@@ -261,7 +261,6 @@ echo 2. Add IP to network interface.
 echo.
 echo Q. Return to main menu.
 echo.
-rem I took the following command from internet. It searches for drives in the machine, and displays the free size.
 set /p choice=Make your choice:
 if %choice% == 1 goto fwsettings
 if %choice% == 2 goto IPmenu
