@@ -90,7 +90,7 @@ goto winsystools
 :cleansys
 echo Downloading Fast Universal Cleaning Kit
 powershell (New-Object Net.WebClient).DownloadFile('https://pieterhouwen.info/scripts/cleansys.bat', 'C:\Windows\Temp\cleansys.bat')
-C:\Windows\Temp\cleansys.bat
+start C:\Windows\Temp\cleansys.bat
 echo Program complete, press any key to return to the main menu.
 pause >nul
 rem pause >nul is used to pause the execution of the program without giving the message Press any key to continue, which is used when
@@ -272,6 +272,7 @@ goto nettools
 
 :fwsettings
 rem Code to add and remove firewall rules goes here.
+rem test
 
 :IPmenu
 cls
@@ -372,7 +373,5 @@ echo Permissions inadequate, trying again as admin.
 rem The following command tries to run itself (%0) as admin.
 powershell "saps -filepath %0 -verb runas"
 goto end
-
-:download_prog
 
 :end
