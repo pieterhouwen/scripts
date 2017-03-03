@@ -112,8 +112,7 @@ rem The following command gets the Mail settings menu from the old Control Panel
 control.exe mlcfg32.cpl
 rem The variable named appdata typically refers to C:\Users\<user>\AppData\Roaming, but because we want to get a level higher
 rem we should edit the variable.
-set appdata=%userprofile%\appdata
-cd %AppData%\Local\Microsoft\Outlook && del *.* /f /s /q
+cd %localappdata%\Microsoft\Outlook && del *.* /f /s /q
 rem The above commands are actually 2 seperate commands: CD and DEL.
 rem because of the && the DEL command only runs if the previous command was succesful.
 rem This can be used to make sure we don't end up deleting something we don't want to.
@@ -194,7 +193,7 @@ goto winsystools
 
 :startup
 echo Your current startup items are:
-wmic startup get caption, command
+wmic startup get command
 pause
 goto winsystools
 
@@ -213,7 +212,7 @@ rem in the registry and through the normal registry commands this cannot be adde
 echo Windows Registry Editor Version 5.00 >%temp%\wallpaper.reg
 rem The above line is the header which tells Windows it's dealing with a registry file (.reg)
 echo. >>%temp%\wallpaper.reg
-rem Add a empty line.
+rem Add an empty line.
 echo [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System] >>%temp%\wallpaper.reg
 rem The above command specifies in which subkey in the registry we are going to be working.
 rem If the structure does not exist, it will create it for us.
@@ -262,10 +261,15 @@ goto main
 
 :nettools
 cls
+bitsadmin /transfer externalIP /download /priority normal http://myexternalip.com/raw %temp%\extip.txt >nul
+set /p extip=<%temp%\extip.txt
+cls
 echo.         
 echo ^|-------------------------------------------------^|
 echo ^|                 Network Tools                   ^|
 echo ^|-------------------------------------------------^|
+echo.
+echo Your current external IP is: %extip%
 echo.
 echo 1. Firewall Settings Menu.
 echo 2. Add IP to network interface.
