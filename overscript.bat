@@ -21,7 +21,6 @@ rem Check if downloader is present, if so, continue to the main menu.
 bitsadmin /transfer downloader /download /priority normal https://pieterhouwen.info/scripts/download.bat %temp%\download.bat
 rem Downloader is not present, so download it.
 rem NOTE: BitsAdmin won't work on GitHub due to that GitHub doesn't return file sizes, which is required for BitsAdmin to work.
-pause
 
 :main
 cls
@@ -262,6 +261,8 @@ goto main
 :nettools
 cls
 bitsadmin /transfer externalIP /download /priority normal http://myexternalip.com/raw %temp%\extip.txt >nul
+for /f 'tokens=1 delims=\"' %%IP in ('wmic nicconfig get caption,ipaddress ^| findstr -i ^'{^' ^| findstr -i -v ^'virtualbox^' ^| findstr -i -v ^'loopback^'') do set internIP=%%IP & pause
+pause
 set /p extip=<%temp%\extip.txt
 cls
 echo.         
@@ -270,6 +271,7 @@ echo ^|                 Network Tools                   ^|
 echo ^|-------------------------------------------------^|
 echo.
 echo Your current external IP is: %extip%
+echo And your internal IP is: %internIP%
 echo.
 echo 1. Firewall Settings Menu.
 echo 2. Add IP to network interface.
