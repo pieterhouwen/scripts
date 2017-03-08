@@ -12,15 +12,33 @@ goto perm_fail
 rem If the program reaches this line it means that the errorlevel was not 0, which means that the program wasn't run as admin.
 rem NOTE: Starting this program again as admin won't work if there are spaces in the file path.
 
+
 :perm_success
 cls
 rem cls means CLearScreen, which just empties the screen of all output.
 rem If we are at this point, it means that the program is being run as admin.
-if exist %temp%\download.bat goto main
+if exist %temp%\download.bat goto pre-main
 rem Check if downloader is present, if so, continue to the main menu.
 bitsadmin /transfer downloader /download /priority normal https://pieterhouwen.info/scripts/download.bat %temp%\download.bat
 rem Downloader is not present, so download it.
 rem NOTE: BitsAdmin won't work on GitHub due to that GitHub doesn't return file sizes, which is required for BitsAdmin to work.
+:pre-main
+rem Let's add some CLI options to navigate the menus more quickly.
+rem First, lets check if there are arguments passed to overscript.
+rem We can check this by looking at a variable called %1 (This is for the first argument after overscript.bat)
+rem Example: If the user opens overscript as follows: "overscript.bat winsystools" the %1 is "winsystools".
+rem This can continue like so: overscript.bat arg1 arg2 arg3
+rem So in this example %1 is "arg1" %2 is "arg2" etc.
+rem So lets check if %1 is given.
+rem So if %1 is not equal to "" (nothing) then go to the label specified in %1.
+
+if %1 == "" goto main
+if %1 == "Windows" goto winsystools
+if %1 == "windows" goto winsystools
+if %1 == "Hardware" goto hwtools
+if %1 == "hardware" goto hwtools
+if %1 == "Network" goto nettools
+if %1 == "network" goto nettools
 
 :main
 cls
@@ -232,6 +250,8 @@ cls
 echo ^|-------------------------------------------------^|            
 echo ^|           Hardware information tools            ^|
 echo ^|-------------------------------------------------^|
+echo                Your current CPU is:
+wmic cpu get name, numberofcores
 echo.
 echo 1. Motherboard information.
 echo 2. RAM information.
