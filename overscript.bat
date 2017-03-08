@@ -31,9 +31,15 @@ rem This can continue like so: overscript.bat arg1 arg2 arg3
 rem So in this example %1 is "arg1" %2 is "arg2" etc.
 rem So lets check if %1 is given.
 rem So if %1 is not equal to "" (nothing) then go to the label specified in %1.
-if %1 NEQ '' goto %1
-if %errorlevel% NEQ 0 goto main
-rem The above line checks if the goto statement was executed succesfully. If not, continue to the main menu.
+
+if %1 == "" goto main
+if %1 == "Windows" goto winsystools
+if %1 == "windows" goto winsystools
+if %1 == "Hardware" goto hwtools
+if %1 == "hardware" goto hwtools
+if %1 == "Network" goto nettools
+if %1 == "network" goto nettools
+
 :main
 cls
 echo ^|-------------------------------------------------^|
