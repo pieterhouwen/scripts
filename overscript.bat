@@ -172,27 +172,39 @@ echo You have chosen Windows 7 Professional
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Professional" /f >nul
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Professional" /f >nul
 pause
-goto winsystools
+goto WinEnd
 
 :WinPrem
 echo You have chosen Windows 7 Home Premium
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 HomePremium" /f >nul
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "HomePremium" /f >nul
 pause
-goto winsystools
+goto WinEnd
 
 :WinUlt
 echo You have chosen Windows 7 Ultimate
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Ultimate" /f >nul
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Ultimate" /f >nul
 pause
-goto winsystools
+goto WinEnd
 
 :WinEnt
 echo You have chosen Windows 7 Enterprise
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v ProductName /d "Windows 7 Enterprise" /f >nul
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /t REG_SZ /v EditionID /d "Enterprise" /f >nul
 pause
+goto WinEnd
+
+:WinEnd
+echo.
+echo Operation is complete. If it was succesful, please reboot from the Windows 
+echo CD/DVD and choose the "Repair" option.
+echo.
+set /p rbt=Reboot now? [Y/N]:
+if %rbt% == "y" shutdown -r -t 00
+if %rbt% == "Y" shutdown -r -t 00
+if %rbt% == "N" goto winsystools
+if %rbt% == "n" goto winsystools
 goto winsystools
 
 :showdrives
