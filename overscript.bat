@@ -236,6 +236,9 @@ goto winsystools
 :wallpaper
 echo Note: All users should be able to view the image or else the background will be empty!
 set /p location=Specify where the image is located (example C:\image.jpg):
+rem Let's try to find out if the file actually exists before adding it to registry.
+if not exist %location% goto wallpapererr
+:nowallpapererror
 rem Now we're going to write a registry file, this is used because in some cases there is no System subkey
 rem in the registry and through the normal registry commands this cannot be added.
 echo Windows Registry Editor Version 5.00 >%temp%\wallpaper.reg
@@ -244,17 +247,25 @@ echo. >>%temp%\wallpaper.reg
 rem Add an empty line.
 echo [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System] >>%temp%\wallpaper.reg
 rem The above command specifies in which subkey in the registry we are going to be working.
-rem If the structure does not exist, it will create it for us.
+rem If the registry structure does not exist, it will create it for us.
 echo "WallpaperStyle"="2" >>%temp%\wallpaper.reg
 reg import %temp%\wallpaper.reg
 rem Import our registry key, so the subkey will be created, then we can use conventional methods to add our own key
 rem for the background.
 rem We use reg import because even though the .reg file can be added by starting (or double-clicking it) we want to suppress
 rem the warning that messing with the registry can be dangerous.
-
 reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System /v Wallpaper /d "%location%" /f /t REG_SZ
 echo Done
 pause
+goto winsystools
+
+:wallpapererr
+echo The specified file cannot be found. If you continue, the wallpaper will be black.
+set /p cnt=Continue? [Y/N]:
+if %rbt% == "y" goto nowallpapererror
+if %rbt% == "Y" goto nowallpapererror
+if %rbt% == "N" goto winsystools
+if %rbt% == "n" goto winsystools
 goto winsystools
 
 :hwtools
