@@ -278,12 +278,14 @@ wmic cpu get name, numberofcores
 echo.
 echo 1. Motherboard information.
 echo 2. RAM information.
+echo 3. SMARTmon.
 echo.
 echo Q. Return to main menu.
 echo.
 set /p choice=Make your choice:
 if %choice% == 1 goto mboard_info
 if %choice% == 2 goto ram_info
+if %choice% == 3 goto smartmon
 if %choice% == q goto main
 if %choice% == Q goto main
 echo Invalid input! Please try again.
@@ -300,6 +302,22 @@ echo The values provided are in bytes,
 wmic memorychip get speed, capacity
 pause
 goto main
+
+:smartmon
+rem So SMARTmon is actually a script which reads the SMART status of a disk and writes it to a file.
+rem By searching the file for anything other than OK (it's not a big deal that the file actually contains 2 columns,
+rem it searches by line.) If we then can check the error code, if any error code other than 1 is found,
+rem it means that the search for anything other than OK was succesful, so we want to see what's going on.
+wmic diskdrive get caption, status >%userprofile%\smartmon.log
+rem The single > is important, it means overwrite the log file everytime this runs.
+findstr -v "OK" %userprofile%\smartmon.log
+rem Search for anything other than OK
+if %errorlevel% NEQ 1 goto smartwarning
+:smartwarning
+echo msgbox("Your hard drive monitoring system has been triggered! Press OK to learn more.") >%temp%\alert.vbs
+%temp%\alert.vbs
+cmd.exe /C "wmic diskdrive get caption, status" & pause
+goto winsystools
 
 :nettools
 cls
