@@ -14,11 +14,12 @@ rem NOTE: Starting this program again as admin won't work if there are spaces in
 
 
 :perm_success
+cls
 rem cls means CLearScreen, which just empties the screen of all output.
 rem If we are at this point, it means that the program is being run as admin.
-rem if exist %temp%\download.bat goto pre-main
+if exist %temp%\download.bat goto pre-main
 rem Check if downloader is present, if so, continue to the main menu.
-rem bitsadmin /transfer downloader /download /priority normal https://pieterhouwen.info/scripts/download.bat %temp%\download.bat
+bitsadmin /transfer downloader /download /priority normal https://pieterhouwen.info/scripts/download.bat %temp%\download.bat
 rem Downloader is not present, so download it.
 rem NOTE: BitsAdmin won't work on GitHub due to that GitHub doesn't return file sizes, which is required for BitsAdmin to work.
 :pre-main
@@ -39,7 +40,7 @@ if "%1" == "Network" goto nettools
 if "%1" == "network" goto nettools
 
 :main
-pause
+cls
 echo ^|-------------------------------------------------^|
 echo ^|     Welcome to the all-in-one batch toolkit!    ^|
 echo ^|             Made by Pieter and Roland           ^|
@@ -82,7 +83,8 @@ echo 5.  Show drives and free space.
 echo 6.  System File Checker.
 echo 7.  Startup checker (add "d" for more info).
 echo 7d. Detailed startup checker.
-echo 8.  Force Desktop Wallpaper.                                                                        
+echo 8.  Force Desktop Wallpaper.   
+echo 9.  SMARTmon.                                                                     
 echo.
 echo Q.  Return to main menu.
 echo.
@@ -96,6 +98,7 @@ if %choice% == 6 goto sfc
 if %choice% == 7 goto startup
 if %choice% == 7d goto startupext
 if %choice% == 8 goto wallpaper
+if %choice% == 9 goto smartmon
 if %choice% == q goto main
 if %choice% == Q goto main
 echo Invalid input detected! Please try again!
@@ -199,10 +202,10 @@ echo Operation is complete. If it was succesful, please reboot from the Windows
 echo CD/DVD and choose the "Repair" option.
 echo.
 set /p rbt=Reboot now? [Y/N]:
-if %rbt% == "y" shutdown -r -t 00
-if %rbt% == "Y" shutdown -r -t 00
-if %rbt% == "N" goto winsystools
-if %rbt% == "n" goto winsystools
+if %rbt% == y shutdown -r -t 00
+if %rbt% == Y shutdown -r -t 00
+if %rbt% == N goto winsystools
+if %rbt% == n goto winsystools
 goto winsystools
 
 :showdrives
@@ -260,10 +263,10 @@ goto winsystools
 :wallpapererr
 echo The specified file cannot be found. If you continue, the wallpaper will be black.
 set /p cnt=Continue? [Y/N]:
-if %rbt% == "y" goto nowallpapererror
-if %rbt% == "Y" goto nowallpapererror
-if %rbt% == "N" goto winsystools
-if %rbt% == "n" goto winsystools
+if %rbt% == y goto nowallpapererror
+if %rbt% == Y goto nowallpapererror
+if %rbt% == N goto winsystools
+if %rbt% == n goto winsystools
 goto winsystools
 
 :hwtools
@@ -271,7 +274,7 @@ cls
 echo ^|-------------------------------------------------^|            
 echo ^|           Hardware information tools            ^|
 echo ^|-------------------------------------------------^|
-echo                Your current CPU is:
+echo                 Your current CPU is:
 wmic cpu get name, numberofcores
 echo.
 echo 1. Motherboard information.
@@ -302,19 +305,39 @@ pause
 goto main
 
 :smartmon
+echo SMARTmon can now be run as a scheduled task!
+set /p task=Enable? [Y/N]:
+if %task% == N goto nosch
+if %task% == n goto nosch
+if %task% == Y goto schtask
+if %task% == y goto schtask
+echo Invalid input! Please try again.
+pause
+goto smartmon
+
+:schtask
+%temp%\download https://pieterhouwen.info/scripts/smartmon.bat %localappdata%\smartmon.bat
+schtasks /create /TN SMARTmon /TR "%localappdata%\smartmon.bat" /SC ONLOGON
+pause
 rem So SMARTmon is actually a script which reads the SMART status of a disk and writes it to a file.
 rem By searching the file for anything other than OK (it's not a big deal that the file actually contains 2 columns,
 rem it searches by line.) If we then can check the error code, if any error code other than 1 is found,
 rem it means that the search for anything other than OK was succesful, so we want to see what's going on.
-wmic diskdrive get caption, status >%userprofile%\smartmon.log
+:nosch
+for /f "tokens=2 delims==" %%F in ('wmic diskdrive get status /format:list') do set status=%%F
 rem The single > is important, it means overwrite the log file everytime this runs.
-findstr -v "OK" %userprofile%\smartmon.log
 rem Search for anything other than OK
-if %errorlevel% NEQ 1 goto smartwarning
+if "%status%" NEQ "OK" goto smartwarning
+goto nosmartwarning
 :smartwarning
 echo msgbox("Your hard drive monitoring system has been triggered! Press OK to learn more.") >%temp%\alert.vbs
 %temp%\alert.vbs
 cmd.exe /C "wmic diskdrive get caption, status" & pause
+goto winsystools
+
+:nosmartwarning
+echo msgbox("All drives report normal, keep it up!") >%temp%\allgood.vbs
+%temp%\allgood.vbs
 goto winsystools
 
 :nettools
@@ -390,10 +413,10 @@ goto noerror
 netsh interface ipv4 reset
 echo Computer must be rebooted for changes to take effect. Do that now?
 set /p restart=Restart computer? (Y/N):
-if %restart% == "Y" shutdown -r -t 00
-if %restart% == "y" shutdown -r -t 00
-if %restart% == "N" echo Shutdown cancelled.
-if %restart% == "n" echo Shutdown cancelled.
+if %restart% == Y shutdown -r -t 00
+if %restart% == y shutdown -r -t 00
+if %restart% == N echo Shutdown cancelled.
+if %restart% == n echo Shutdown cancelled.
 pause
 goto nettools
 
