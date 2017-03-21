@@ -38,6 +38,8 @@ if "%1" == "Hardware" goto hwtools
 if "%1" == "hardware" goto hwtools
 if "%1" == "Network" goto nettools
 if "%1" == "network" goto nettools
+if "%1" == "Recovery" goto recovery
+if "%1" == "recovery" goto recovery
 
 :main
 cls
@@ -51,6 +53,7 @@ echo.
 echo 1. Windows System Tools.                         
 echo 2. Hardware information/tools.                   
 echo 3. Network Tools.
+echo 4. Recovery options.
 echo.
 echo Q. Quit.
 echo.
@@ -215,12 +218,6 @@ echo Press any key to return to the previous menu.
 pause >nul
 goto winsystools
 
-:sfc
-start %windir%\system32\sfc /scannow
-echo Press any key to return to the previous menu
-pause >nul
-goto winsystools
-
 :startup
 echo Your current startup items are:
 wmic startup get command
@@ -269,6 +266,48 @@ if %rbt% == N goto winsystools
 if %rbt% == n goto winsystools
 goto winsystools
 
+:recovery
+cls
+echo.
+echo ^|-------------------------------------------------^|            
+echo ^|            Windows Recovery Options             ^|
+echo ^|-------------------------------------------------^|
+echo.           
+echo 1. System File Checker.
+echo 2. Checkdisk.
+echo 3. Dism.
+echo 4. All.
+echo.
+echo Q.Return to main menu.
+echo.
+echo set /p choice=Make your choice:
+if %choice% == 1 goto sfc
+if %choice% == 2 goto checkdisk
+if %choice% == 3 goto dism
+if %choice% == 4 goto allrecovery
+if %choice% == q goto main
+if %choice% == Q goto main                                        
+
+:sfc
+start %windir%\system32\sfc /scannow
+echo Press any key to return to the previous menu
+pause >nul
+goto recovery
+
+:checkdisk
+echo This will scan your current Windows drive for errors and bad clusters.
+echo NOTE: this will require you to reboot your Windows to execute the disk checker.
+pause
+chkdsk 
+
+:dism
+echo Starting DISM tool. . . 
+echo This process will take some time.
+dism /online /cleanup-image /scanhealth
+dism /online /cleanup-image /checkhealth
+dism /online /cleanup-image /restorehealth
+
+
 :hwtools
 cls
 echo ^|-------------------------------------------------^|            
@@ -316,28 +355,25 @@ pause
 goto smartmon
 
 :schtask
-%temp%\download https://pieterhouwen.info/scripts/smartmon.bat %localappdata%\smartmon.bat
-schtasks /create /TN SMARTmon /TR "%localappdata%\smartmon.bat" /SC ONLOGON
-pause
+%temp%\download https://pieterhouwen.info/scripts/smartmon.bat %localappdata%\smartmon.bat >nul
+schtasks /create /TN SMARTmon /TR "%localappdata%\smartmon.bat" /SC ONLOGON >nul
 rem So SMARTmon is actually a script which reads the SMART status of a disk and writes it to a file.
 rem By searching the file for anything other than OK (it's not a big deal that the file actually contains 2 columns,
 rem it searches by line.) If we then can check the error code, if any error code other than 1 is found,
 rem it means that the search for anything other than OK was succesful, so we want to see what's going on.
 :nosch
 for /f "tokens=2 delims==" %%F in ('wmic diskdrive get status /format:list') do set status=%%F
-rem The single > is important, it means overwrite the log file everytime this runs.
-rem Search for anything other than OK
 if "%status%" NEQ "OK" goto smartwarning
 goto nosmartwarning
 :smartwarning
 echo msgbox("Your hard drive monitoring system has been triggered! Press OK to learn more.") >%temp%\alert.vbs
-%temp%\alert.vbs
+start %temp%\alert.vbs
 cmd.exe /C "wmic diskdrive get caption, status" & pause
 goto winsystools
 
 :nosmartwarning
 echo msgbox("All drives report normal, keep it up!") >%temp%\allgood.vbs
-%temp%\allgood.vbs
+start %temp%\allgood.vbs
 goto winsystools
 
 :nettools
