@@ -83,11 +83,10 @@ echo 2.  Legacy bootmenu switcher.
 echo 3.  Outlook profile resetter.                      
 echo 4.  Windows 7 Version changer (CD/DVD required).   
 echo 5.  Show drives and free space.                    
-echo 6.  System File Checker.
-echo 7.  Startup checker (add "d" for more info).
-echo 7d. Detailed startup checker.
-echo 8.  Force Desktop Wallpaper.   
-echo 9.  SMARTmon.                                                                     
+echo 6.  Startup checker (add "d" for more info).
+echo 6d. Detailed startup checker.
+echo 7.  Force Desktop Wallpaper.   
+echo 8.  SMARTmon.                                                                     
 echo.
 echo Q.  Return to main menu.
 echo.
@@ -97,11 +96,10 @@ if %choice% == 2 goto bcdedit
 if %choice% == 3 goto outlookreset
 if %choice% == 4 goto WinVerMenu
 if %choice% == 5 goto showdrives
-if %choice% == 6 goto sfc
-if %choice% == 7 goto startup
-if %choice% == 7d goto startupext
-if %choice% == 8 goto wallpaper
-if %choice% == 9 goto smartmon
+if %choice% == 6 goto startup
+if %choice% == 6d goto startupext
+if %choice% == 7 goto wallpaper
+if %choice% == 8 goto smartmon
 if %choice% == q goto main
 if %choice% == Q goto main
 echo Invalid input detected! Please try again!
@@ -286,7 +284,10 @@ if %choice% == 2 goto checkdisk
 if %choice% == 3 goto dism
 if %choice% == 4 goto allrecovery
 if %choice% == q goto main
-if %choice% == Q goto main                                        
+if %choice% == Q goto main
+echo Invalid input! Please try again.
+pause
+goto recovery                                        
 
 :sfc
 start %windir%\system32\sfc /scannow
@@ -298,7 +299,8 @@ goto recovery
 echo This will scan your current Windows drive for errors and bad clusters.
 echo NOTE: this will require you to reboot your Windows to execute the disk checker.
 pause
-chkdsk 
+chkdsk %systemdrive% /F /R /B 
+goto recovery
 
 :dism
 echo Starting DISM tool. . . 
@@ -306,7 +308,23 @@ echo This process will take some time.
 dism /online /cleanup-image /scanhealth
 dism /online /cleanup-image /checkhealth
 dism /online /cleanup-image /restorehealth
+echo Please check the output of the previous commands before continuing.
+echo Press any key to return to the recovery menu.
+pause >nul
+goto recovery
 
+:all
+sfc /scannow 2>%userprofile%\desktop\sfc_errors.log
+dism /online /cleanup-image /scanhealth 2>%userprofile%\desktop\dism_errors.log
+dism /online /cleanup-image /checkhealth 2>>%userprofile%\desktop\dism_errors.log
+dism /online /cleanup-image /restorehealth 2>>%userprofile%\desktop\dism_errors.log
+chkdsk %systemdrive% /F /R /B 
+echo Complete! Errors have been logged to your desktop folder.
+echo Please take the time to read the output of the previous commands.
+echo.
+echo Press any key to return to the recovery menu.
+pause >nul
+goto recovery
 
 :hwtools
 cls
