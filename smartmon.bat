@@ -9,5 +9,3 @@ echo msgbox("Your hard drive monitoring system has been triggered! Press OK to l
 %temp%\alert.vbs
 cmd.exe /C "wmic diskdrive get caption, status" & pause
 :nowarning
-echo msgbox("All drives report normal.") >%temp%\alert.vbs
-%temp%\alert.vbs
