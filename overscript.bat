@@ -40,6 +40,7 @@ if "%1" == "Network" goto nettools
 if "%1" == "network" goto nettools
 if "%1" == "Recovery" goto recovery
 if "%1" == "recovery" goto recovery
+if "%1" == "winvermenu2" goto winvermenu2
 
 :main
 cls
@@ -144,6 +145,15 @@ goto main
 
 :WinVerMenu
 cls
+for /f "tokens=3 delims= " %%O in ('wmic os get caption ^| findstr -v caption') do set opsy=%%O
+if %opsy% == 7 goto winvermenu2
+echo It looks like you are not running Windows 7.
+echo This feature has been disabled so you don't screw up your Windows.
+echo.
+echo If you believe this is in error, please restart overscript with the winvermenu2 parameter.
+pause
+goto winsystools
+:winvermenu2
 echo.
 echo ^|-------------------------------------------------^|
 echo ^| NOTE: YOU NEED THE ORIGINAL WINDOWS INSTALL CD! ^|
@@ -306,7 +316,9 @@ echo This process will take some time.
 dism /online /cleanup-image /scanhealth
 dism /online /cleanup-image /checkhealth
 dism /online /cleanup-image /restorehealth
-
+echo Please take the time to read the output of above commands.
+pause
+goto recovery
 
 :hwtools
 cls
