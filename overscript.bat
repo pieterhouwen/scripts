@@ -41,6 +41,7 @@ if "%1" == "network" goto nettools
 if "%1" == "Recovery" goto recovery
 if "%1" == "recovery" goto recovery
 if "%1" == "winvermenu2" goto winvermenu2
+if "%1" == "update" goto winupdate
 
 :main
 cls
@@ -151,6 +152,7 @@ echo.
 echo If you believe this is in error, please restart overscript with the winvermenu2 parameter.
 pause
 goto winsystools
+
 :winvermenu2
 echo.
 echo ^|-------------------------------------------------^|
@@ -284,7 +286,8 @@ echo.
 echo 1. System File Checker.
 echo 2. Checkdisk.
 echo 3. Dism.
-echo 4. All.
+echo 4. Windows Update Reset.
+echo 5. All.
 echo.
 echo Q.Return to main menu.
 echo.
@@ -292,7 +295,8 @@ echo set /p choice=Make your choice:
 if %choice% == 1 goto sfc
 if %choice% == 2 goto checkdisk
 if %choice% == 3 goto dism
-if %choice% == 4 goto allrecovery
+if %choice% == 4 goto winupdate
+if %choice% == 5 goto allrecovery
 if %choice% == q goto main
 if %choice% == Q goto main
 echo Invalid input! Please try again.
@@ -318,16 +322,78 @@ echo This process will take some time.
 dism /online /cleanup-image /scanhealth
 dism /online /cleanup-image /checkhealth
 dism /online /cleanup-image /restorehealth
-<<<<<<< HEAD
 echo Please take the time to read the output of above commands.
-pause
-=======
-echo Please check the output of the previous commands before continuing.
 echo Press any key to return to the recovery menu.
 pause >nul
 goto recovery
 
-:all
+:winupdate
+cls
+echo This will reset your Windows Update.
+echo Please be patient. . .
+echo.
+echo Stopping services. . .
+net stop bits >nul
+net stop wuauserv >nul
+net stop appidsvc >nul
+net stop cryptsvc >nul
+echo Removing files. . .
+del "%allusersprofile%\Application Data\Microsoft\Network\Downloader\qmgr*.dat"
+ren %systemroot%\SoftwareDistribution SoftwareDistribution.bak >nul
+ren %systemroot%\system32\catroot2 catroot2.bak >nul
+echo Reset Windows Update Security Descriptors. . .
+sc.exe sdset bits D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU) >nul
+sc.exe sdset wuauserv D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU) >nul
+cd /d %windir%\system32
+echo Registering DLL's. . .
+regsvr32 /s atl.dll  
+regsvr32 /s urlmon.dll  
+regsvr32 /s mshtml.dll  
+regsvr32 /s shdocvw.dll  
+regsvr32 /s browseui.dll  
+regsvr32 /s jscript.dll  
+regsvr32 /s vbscript.dll  
+regsvr32 /s scrrun.dll  
+regsvr32 /s msxml.dll  
+regsvr32 /s msxml3.dll  
+regsvr32 /s msxml6.dll  
+regsvr32 /s actxprxy.dll  
+regsvr32 /s softpub.dll  
+regsvr32 /s wintrust.dll  
+regsvr32 /s dssenh.dll  
+regsvr32 /s rsaenh.dll  
+regsvr32 /s gpkcsp.dll  
+regsvr32 /s sccbase.dll  
+regsvr32 /s slbcsp.dll  
+regsvr32 /s cryptdlg.dll  
+regsvr32 /s oleaut32.dll  
+regsvr32 /s ole32.dll  
+regsvr32 /s shell32.dll  
+regsvr32 /s initpki.dll  
+regsvr32 /s wuapi.dll  
+regsvr32 /s wuaueng.dll  
+regsvr32 /s wuaueng1.dll  
+regsvr32 /s wucltui.dll  
+regsvr32 /s wups.dll  
+regsvr32 /s wups2.dll  
+regsvr32 /s wuweb.dll  
+regsvr32 /s qmgr.dll  
+regsvr32 /s qmgrprxy.dll  
+regsvr32 /s wucltux.dll  
+regsvr32 /s muweb.dll  
+regsvr32 /s wuwebv.dll  
+netsh winsock reset 
+echo Subroutine complete, starting services. . .
+net start bits
+net start wuauserv
+net start appidsvc
+net start cryptsvc
+echo Done.
+echo Press any key to return to the Recovery Menu.
+pause >nul
+goto recovery
+
+:allrecovery
 sfc /scannow 2>%userprofile%\desktop\sfc_errors.log
 dism /online /cleanup-image /scanhealth 2>%userprofile%\desktop\dism_errors.log
 dism /online /cleanup-image /checkhealth 2>>%userprofile%\desktop\dism_errors.log
@@ -338,7 +404,6 @@ echo Please take the time to read the output of the previous commands.
 echo.
 echo Press any key to return to the recovery menu.
 pause >nul
->>>>>>> b7004d25251cff0f2005cc32c8febe872b6020c7
 goto recovery
 
 :hwtools
@@ -414,6 +479,12 @@ cls
 rem myexternalip.com is down, 
 bitsadmin /transfer externalIP /download /priority normal http://ipecho.net/plain %temp%\extip.txt >nul
 set /p extip=<%temp%\extip.txt
+
+:nettools2
+cls
+rem myexternalip.com is down, 
+bitsadmin /transfer externalIP /download /priority normal http://ipecho.net/plain %temp%\extip.txt >nul
+set /p extip=<%temp%\extip.txt
 cls
 echo.         
 echo ^|-------------------------------------------------^|
@@ -435,11 +506,12 @@ if %choice% == q goto main
 if %choice% == Q goto main
 echo Invalid input! Please try again.
 pause
-goto nettools
+goto nettools2
 
 :fwsettings
 rem Code to add and remove firewall rules goes here.
 rem Well maybe not..
+goto nettools2
 
 :IPmenu
 cls
@@ -487,7 +559,7 @@ if %restart% == y shutdown -r -t 00
 if %restart% == N echo Shutdown cancelled.
 if %restart% == n echo Shutdown cancelled.
 pause
-goto nettools
+goto nettools2
 
 :add
 echo.
