@@ -397,7 +397,7 @@ goto recovery
 sfc /scannow 2>%userprofile%\desktop\sfc_errors.log
 dism /online /cleanup-image /scanhealth 2>%userprofile%\desktop\dism_errors.log
 dism /online /cleanup-image /checkhealth 2>>%userprofile%\desktop\dism_errors.log
-dism /online /cleanup-image /restorehealth 2>>%userprofile%\desktop\dism_errors.log
+dism /online /cleanup-image /restorehealth 2>>%userprofile%\desktop\dism_errors.log 
 chkdsk %systemdrive% /F /R /B 
 echo Complete! Errors have been logged to your desktop folder.
 echo Please take the time to read the output of the previous commands.
