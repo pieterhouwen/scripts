@@ -64,6 +64,7 @@ set /p choice=Make your choice:
 if %choice% == 1 goto winsystools
 if %choice% == 2 goto hwtools
 if %choice% == 3 goto nettools
+if %choice% == 4 goto 
 if %choice% == q goto end
 if %choice% == Q goto end
 rem If the CMD reaches this point, it means that 1 , 2 or 3 wasn't pressed, so we return an error.
@@ -291,7 +292,7 @@ echo 5. All.
 echo.
 echo Q.Return to main menu.
 echo.
-echo set /p choice=Make your choice:
+set /p choice=Make your choice:
 if %choice% == 1 goto sfc
 if %choice% == 2 goto checkdisk
 if %choice% == 3 goto dism
