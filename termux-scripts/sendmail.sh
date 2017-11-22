@@ -51,6 +51,7 @@ do
 			echo Subject: $subject >>tempmail
  			echo To: $to >>tempmail
  			echo From: $from2 \<$from\> >>tempmail
+			echo Content-Type: text/html\; charset=ISO-8859-1 >>tempmail
             # Done, proceed to mail content
             cat tempmail >finalmail
             echo >>finalmail
