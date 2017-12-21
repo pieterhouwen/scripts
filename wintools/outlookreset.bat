@@ -3,6 +3,5 @@ echo Gebruik het configuratiepaneel om de gewenste profielen eerst te verwijdere
 pause
 control.exe mlcfg32.cpl
 set appdata=%userprofile%\appdata
-cd %AppData%\Local\Microsoft\Outlook
-del *.* /f /s /q
+cd %AppData%\Local\Microsoft\Outlook && del *.* /f /s /q
 rem dit is een remark
